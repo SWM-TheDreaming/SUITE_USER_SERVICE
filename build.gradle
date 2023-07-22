@@ -43,6 +43,9 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    //bootstarp
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+
 }
 
 
