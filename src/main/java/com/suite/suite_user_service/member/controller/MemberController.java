@@ -68,7 +68,7 @@ public class MemberController {
 
     @PostMapping("/m/delete")
     public ResponseEntity<Message> deleteSuiteMember() {
-        return null;
+        return ResponseEntity.ok(memberService.withdrawalMember(getSuiteAuthorizer()));
     }
 
 }

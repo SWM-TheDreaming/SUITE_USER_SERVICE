@@ -11,4 +11,6 @@ public interface MemberService {
     Message getMemberInfo(AuthorizerDto authorizerDto);
 
     Message updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto);
+
+    Message withdrawalMember(AuthorizerDto authorizerDto);
 }

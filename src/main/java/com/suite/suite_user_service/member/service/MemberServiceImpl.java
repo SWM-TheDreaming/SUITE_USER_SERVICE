@@ -59,4 +59,12 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
         memberInfo.updateProfile(reqUpdateMemberDto);
         return new Message(StatusCode.OK);
     }
+
+    @Override
+    public Message withdrawalMember(AuthorizerDto authorizerDto) {
+        Member member = memberRepository.findByEmail(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
+
+        memberRepository.delete(member);
+        return new Message(StatusCode.OK);
+    }
 }
