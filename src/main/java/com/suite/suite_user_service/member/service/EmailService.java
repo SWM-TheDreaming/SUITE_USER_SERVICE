@@ -67,7 +67,7 @@ public class EmailService {
         String title = "Suite 회원가입 인증 번호"; //제목
 
         MimeMessage message = emailSender.createMimeMessage();
-        message.addRecipients(MimeMessage.RecipientType.TO, email); //보낼 이메일 설정
+        message.addRecipients(MimeMessage.RecipientType.TO, toEmail); //보낼 이메일 설정
         message.setSubject(title); //제목 설정
         message.setFrom(setFrom); //보내는 이메일
         message.setText("인증 코드 : " + authCode, "utf-8", "html");
