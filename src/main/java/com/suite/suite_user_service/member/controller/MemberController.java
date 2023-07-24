@@ -4,9 +4,7 @@ import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.handler.CustomException;
 import com.suite.suite_user_service.member.handler.StatusCode;
 import com.suite.suite_user_service.member.service.EmailService;
-import com.suite.suite_user_service.member.service.JwtService;
 import com.suite.suite_user_service.member.service.MemberService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.suite.suite_user_service.member.security.config.SecurityUtil.getSuiteAuthorizer;
+import static com.suite.suite_user_service.member.security.JwtInfoExtractor.getSuiteAuthorizer;
 
 
 @RequiredArgsConstructor
@@ -26,7 +24,6 @@ public class MemberController {
 
     private final MemberService memberService;
     private final EmailService emailService;
-    //private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")

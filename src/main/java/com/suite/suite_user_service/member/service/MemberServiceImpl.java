@@ -9,7 +9,8 @@ import com.suite.suite_user_service.member.handler.StatusCode;
 import com.suite.suite_user_service.member.repository.MemberInfoRepository;
 import com.suite.suite_user_service.member.repository.MemberRepository;
 import com.suite.suite_user_service.member.repository.RefreshTokenRepository;
-import com.suite.suite_user_service.member.security.JwtTokenProvider;
+import com.suite.suite_user_service.member.security.JwtCreator;
+import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtCreator jwtTokenProvider;
 
 
     @Override

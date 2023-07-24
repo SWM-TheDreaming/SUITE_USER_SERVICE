@@ -1,5 +1,6 @@
-package com.suite.suite_user_service.member.dto;
+package com.suite.suite_user_service.member.security.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,16 @@ public class AuthorizerDto {
         this.nickName = nickName;
         this.accountStatus = accountStatus;
         this.role = role;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum ClaimName {
+        ID("ID"),
+        NAME("NAME"),
+        NICKNAME("NICKNAME"),
+        ACCOUNTSTATUS("ACCOUNTSTATUS"),
+        ROLE("ROLE");
+        private final String value;
     }
 }

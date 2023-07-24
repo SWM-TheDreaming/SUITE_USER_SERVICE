@@ -1,7 +1,7 @@
 package com.suite.suite_user_service.member.service;
 
 import com.suite.suite_user_service.member.dto.*;
-import com.suite.suite_user_service.member.entity.Member;
+import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 
 public interface MemberService {
 

@@ -12,12 +12,6 @@ import java.util.Date;
 @Component
 public class JwtValidator {
     private final ConfigUtil configUtil;
-    // 토큰에서 회원 정보 추출
-
-
-    public Claims extractToken(String token) {
-        return Jwts.parser().setSigningKey(configUtil.getProperty("jwt.access.key").getBytes()).parseClaimsJws(token).getBody();
-    }
 
     //토큰의 유효성 검사
     public boolean validateToken(ServletRequest request, String jwtToken) {

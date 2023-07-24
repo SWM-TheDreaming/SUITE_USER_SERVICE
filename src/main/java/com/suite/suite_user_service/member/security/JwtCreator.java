@@ -4,22 +4,20 @@ package com.suite.suite_user_service.member.security;
 import com.suite.suite_user_service.member.config.ConfigUtil;
 import com.suite.suite_user_service.member.dto.Token;
 import com.suite.suite_user_service.member.entity.Member;
+import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
 @RequiredArgsConstructor
 @Component
-public class JwtTokenProvider {
+public class JwtCreator {
     public static final String ID = "ID";
     public static final String NAME = "NAME";
     public static final String NICKNAME = "NICKNAME";
@@ -27,7 +25,6 @@ public class JwtTokenProvider {
     public static final String ROLE = "ROLE";
     private final ConfigUtil configUtil;
 
-    private final UserDetailsService userDetailsService;
 
     private String accessSecretKey;
     private String refreshSecretKey;
@@ -57,11 +54,11 @@ public class JwtTokenProvider {
     private String getToken(Member member, Claims claims, Date currentTime, long tokenValidTime, String secretKey) {
         return Jwts.builder()
                 .setClaims(claims) //정보 저장
-                .claim(ID, String.valueOf(member.getMemberId()))
-                .claim(NAME, member.getMemberInfo().getName())
-                .claim(NICKNAME, member.getMemberInfo().getNickname())
-                .claim(ACCOUNTSTATUS, member.getAccountStatus())
-                .claim(ROLE, member.getRole())
+                .claim(AuthorizerDto.ClaimName.ID.getValue(), String.valueOf(member.getMemberId()))
+                .claim(AuthorizerDto.ClaimName.NAME.getValue(), member.getMemberInfo().getName())
+                .claim(AuthorizerDto.ClaimName.NICKNAME.getValue(), member.getMemberInfo().getNickname())
+                .claim(AuthorizerDto.ClaimName.ACCOUNTSTATUS.getValue(), member.getAccountStatus())
+                .claim(AuthorizerDto.ClaimName.ROLE.getValue(), member.getRole())
                 .setIssuedAt(currentTime)  //토큰 발행시간 정보
                 .setExpiration(new Date(currentTime.getTime() + tokenValidTime)) //Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey)  //암호화 알고리즘
@@ -69,15 +66,5 @@ public class JwtTokenProvider {
 
     }
 
-    // 인증 정보 조회
-    public Authentication getAuthentication(ServletRequest request, String token) {
-        try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(extractToken(token).getSubject());
-            return new JwtAuthenticationToken(userDetails, null, userDetails.getAuthorities(), extractToken(token));
-        } catch (NullPointerException e) {
-            request.setAttribute("exception", "ForbiddenException");
-        }
-        return null;
-    }
 
 }
