@@ -1,13 +1,11 @@
 package com.suite.suite_user_service.member.service;
 
-import com.suite.suite_user_service.member.dto.AuthorizerDto;
-import com.suite.suite_user_service.member.dto.Message;
-import com.suite.suite_user_service.member.dto.ReqSignUpMemberDto;
-import com.suite.suite_user_service.member.dto.ReqUpdateMemberDto;
+import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.entity.Member;
 
 public interface MemberService {
 
+    Message getSuiteToken(ReqSignInMemberDto reqSignInMemberDto, String userAgent);
     Message saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto);
     Message getMemberInfo(AuthorizerDto authorizerDto);
 

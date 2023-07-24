@@ -24,17 +24,16 @@ public class JwtTokenProvider {
     public static final String NAME = "NAME";
     public static final String NICKNAME = "NICKNAME";
     public static final String ACCOUNTSTATUS = "ACCOUNTSTATUS";
-
-
+    public static final String ROLE = "ROLE";
     private final ConfigUtil configUtil;
+
+    private final UserDetailsService userDetailsService;
+
     private String accessSecretKey;
     private String refreshSecretKey;
     private long accessTokenValidTime;
     private long refreshTokenValidTime;
 
-    private final UserDetailsService userDetailsService;
-
-    // 객체 초기화, secretKey를 Base64로 인코딩
     @PostConstruct
     protected void init() {
         accessSecretKey = Base64.getEncoder().encodeToString(configUtil.getProperty("jwt.access.key").getBytes());
@@ -62,6 +61,7 @@ public class JwtTokenProvider {
                 .claim(NAME, member.getMemberInfo().getName())
                 .claim(NICKNAME, member.getMemberInfo().getNickname())
                 .claim(ACCOUNTSTATUS, member.getAccountStatus())
+                .claim(ROLE, member.getRole())
                 .setIssuedAt(currentTime)  //토큰 발행시간 정보
                 .setExpiration(new Date(currentTime.getTime() + tokenValidTime)) //Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey)  //암호화 알고리즘
@@ -80,54 +80,4 @@ public class JwtTokenProvider {
         return null;
     }
 
-    // 토큰에서 회원 정보 추출
-    public Claims extractToken(String token) {
-        return Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token).getBody();
-    }
-
-
-
-    //토큰의 유효성 검사
-    public boolean validateToken(ServletRequest request, String jwtToken) {
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (SignatureException e) {
-            request.setAttribute("exception", "ForbiddenException");
-        } catch (MalformedJwtException e) {
-            request.setAttribute("exception", "MalformedJwtException");
-        } catch (ExpiredJwtException e) {
-            request.setAttribute("exception", "ExpiredJwtException");
-        } catch (UnsupportedJwtException e) {
-            request.setAttribute("exception", "UnsupportedJwtException");
-        } catch (IllegalArgumentException e) {
-            request.setAttribute("exception", "IllegalArgumentException");
-        }
-        return false;
-    }
-
-    // RefreshToken 유효성 검증 메소드
-//    public String validateRefreshToken(RefreshToken refreshTokenObj) {
-//        String refreshToken = refreshTokenObj.getRefreshToken();
-//
-//        try {
-//            Jws<Claims> claims = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(refreshToken);
-//            //AccessToken이 만료되지않았을떄만
-//            /*if(!claims.getBody().getExpiration().before(new Date())) {
-//                return recreationAccessToken(claims.getBody().get("sub").toString(), claims.getBody().get("roles"));
-//            }*/
-//            return recreationAccessToken(claims.getBody().get("sub").toString(), claims.getBody().get("roles"));
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//            throw new CustomException(StatusCode.EXPIRED_JWT);
-//        }
-//    }
-//
-//    //AccessToken 새로 발급
-//    private String recreationAccessToken(String email, Object roles) {
-//        Claims claims = Jwts.claims().setSubject(email);
-//        claims.put("roles", roles);
-//        Date currentTime = new Date();
-//        return getToken(claims, currentTime, accessTokenValidTime, accessSecretKey);
-//    }
 }

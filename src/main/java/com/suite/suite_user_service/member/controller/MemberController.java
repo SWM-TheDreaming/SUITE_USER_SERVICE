@@ -26,7 +26,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final EmailService emailService;
-    private final JwtService jwtService;
+    //private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
@@ -46,7 +46,7 @@ public class MemberController {
     public ResponseEntity<Message> loginSuite(@Valid @RequestBody ReqSignInMemberDto reqSignInMemberDto, BindingResult bindingResult, @RequestHeader("User-Agent") String userAgent) {
         if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
 
-        return ResponseEntity.ok(jwtService.login(reqSignInMemberDto, userAgent));
+        return ResponseEntity.ok(memberService.getSuiteToken(reqSignInMemberDto, userAgent));
     }
 
     @PostMapping("/id")

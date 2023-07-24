@@ -1,6 +1,7 @@
 package com.suite.suite_user_service.member.security.config;
 
 import com.suite.suite_user_service.member.security.JwtTokenProvider;
+import com.suite.suite_user_service.member.security.JwtValidator;
 import com.suite.suite_user_service.member.security.filter.JwtAuthenticationFilter;
 import com.suite.suite_user_service.member.security.handler.AuthenticationEntryPointHandler;
 import com.suite.suite_user_service.member.security.handler.WebAccessDeniedHandler;
@@ -30,7 +31,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtValidator jwtValidator;
     private final AuthenticationEntryPointHandler authenticationEntryPointHandler;
     private final WebAccessDeniedHandler webAccessDeniedHandler;
 
@@ -59,7 +60,7 @@ public class WebSecurityConfig {
                 .authenticationEntryPoint(authenticationEntryPointHandler)
                 .accessDeniedHandler(webAccessDeniedHandler)
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtValidator),
                         UsernamePasswordAuthenticationFilter.class); // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
 
         // + 토큰에 저장된 유저정보를 활용하여야 하기 때문에 CustomUserDetailService 클래스를 생성합니다.

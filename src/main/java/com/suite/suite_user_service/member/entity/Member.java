@@ -18,9 +18,7 @@ import java.util.Map;
 @Getter
 @NoArgsConstructor
 @Table(name = "member")
-public class Member implements UserDetails {
-
-
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,39 +39,6 @@ public class Member implements UserDetails {
 
     @OneToOne(mappedBy = "memberId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MemberInfo memberInfo;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        for(String role : role.split(","))
-            authorities.add(new SimpleGrantedAuthority(role));
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
     @Builder
     public Member(String email, String password, String role, String accountStatus) {
