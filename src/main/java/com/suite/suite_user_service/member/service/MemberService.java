@@ -4,6 +4,7 @@ import com.suite.suite_user_service.member.dto.AuthorizerDto;
 import com.suite.suite_user_service.member.dto.Message;
 import com.suite.suite_user_service.member.dto.ReqSignUpMemberDto;
 import com.suite.suite_user_service.member.dto.ReqUpdateMemberDto;
+import com.suite.suite_user_service.member.entity.Member;
 
 public interface MemberService {
 
@@ -13,4 +14,5 @@ public interface MemberService {
     Message updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto);
 
     Message withdrawalMember(AuthorizerDto authorizerDto);
+
 }

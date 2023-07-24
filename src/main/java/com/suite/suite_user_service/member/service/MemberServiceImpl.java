@@ -1,9 +1,6 @@
 package com.suite.suite_user_service.member.service;
 
-import com.suite.suite_user_service.member.dto.AuthorizerDto;
-import com.suite.suite_user_service.member.dto.Message;
-import com.suite.suite_user_service.member.dto.ReqSignUpMemberDto;
-import com.suite.suite_user_service.member.dto.ReqUpdateMemberDto;
+import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.entity.Member;
 import com.suite.suite_user_service.member.entity.MemberInfo;
 import com.suite.suite_user_service.member.handler.CustomException;
@@ -46,7 +43,6 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
     @Override
     public Message getMemberInfo(AuthorizerDto authorizerDto) {
         Member member = memberRepository.findByEmail(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
-
         return new Message(StatusCode.OK, member.entityToDto());
     }
 
@@ -67,4 +63,15 @@ public class MemberServiceImpl implements MemberService, UserDetailsService {
 
         return new Message(StatusCode.OK);
     }
+
+    private Boolean isActiveMember(Member member) {
+        if (member.getAccountStatus() == String.valueOf(AccountStatus.ACTIVATE)){
+            return true;
+        }
+
+        return false;
+    }
+
+
+
 }

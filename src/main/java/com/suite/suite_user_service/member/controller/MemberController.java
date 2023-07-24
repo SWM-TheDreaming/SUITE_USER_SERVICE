@@ -45,6 +45,7 @@ public class MemberController {
     @PostMapping("/signin")
     public ResponseEntity<Message> loginSuite(@Valid @RequestBody ReqSignInMemberDto reqSignInMemberDto, BindingResult bindingResult, @RequestHeader("User-Agent") String userAgent) {
         if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
+
         return ResponseEntity.ok(jwtService.login(reqSignInMemberDto, userAgent));
     }
 

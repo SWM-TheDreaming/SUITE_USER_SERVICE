@@ -1,15 +1,14 @@
 package com.suite.suite_user_service.member.service;
 
+import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.security.JwtTokenProvider;
-import com.suite.suite_user_service.member.dto.Message;
-import com.suite.suite_user_service.member.dto.ReqSignInMemberDto;
-import com.suite.suite_user_service.member.dto.Token;
 import com.suite.suite_user_service.member.entity.Member;
 import com.suite.suite_user_service.member.entity.RefreshToken;
 import com.suite.suite_user_service.member.handler.CustomException;
 import com.suite.suite_user_service.member.handler.StatusCode;
 import com.suite.suite_user_service.member.repository.MemberRepository;
 import com.suite.suite_user_service.member.repository.RefreshTokenRepository;
+import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -45,6 +44,12 @@ public class JwtService {
 
     private Token getLoginToken(String email, String userAgent) {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new CustomException(StatusCode.USERNAME_OR_PASSWORD_NOT_FOUND));
+
+        if(member.getAccountStatus().equals(AccountStatus.DORMANT.getStatus()))
+            throw new CustomException(StatusCode.DORMANT_ACCOUNT);
+        else if(member.getAccountStatus().equals(AccountStatus.DISABLED.getStatus()))
+            throw new CustomException(StatusCode.DISABLED_ACCOUNT);
+
         Token token = jwtTokenProvider.createToken(member);
         //RefreshToken을 DB에 저장
         RefreshToken refreshToken = RefreshToken.builder()
@@ -69,10 +74,6 @@ public class JwtService {
         return token;
     }
 
-//    public String getNewAccessToken(RefreshToken refreshToken) {
-//        if(refreshToken.getRefreshToken() != null)
-//            return jwtTokenProvider.validateRefreshToken(refreshToken);
-//        else
-//            throw new CustomException(StatusCode.RE_LOGIN);
-//    }
+
+
 }
