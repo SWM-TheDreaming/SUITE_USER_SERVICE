@@ -1,5 +1,6 @@
 package com.suite.suite_user_service.member.entity;
 
+import com.suite.suite_user_service.member.dto.AccountStatus;
 import com.suite.suite_user_service.member.dto.ResMemberInfoDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -101,5 +102,8 @@ public class Member implements UserDetails {
         memberInfo.setMemberId(this);
     }
 
+    public void updateAccountStatus() {
+        this.accountStatus = String.valueOf(AccountStatus.DISABLED);
+    }
 
 }
