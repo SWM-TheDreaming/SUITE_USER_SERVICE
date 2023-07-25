@@ -18,13 +18,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Component
 public class JwtCreator {
-    public static final String ID = "ID";
-    public static final String NAME = "NAME";
-    public static final String NICKNAME = "NICKNAME";
-    public static final String ACCOUNTSTATUS = "ACCOUNTSTATUS";
-    public static final String ROLE = "ROLE";
-    private final ConfigUtil configUtil;
 
+    private final ConfigUtil configUtil;
 
     private String accessSecretKey;
     private String refreshSecretKey;

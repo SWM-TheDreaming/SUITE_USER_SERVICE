@@ -4,6 +4,7 @@ import com.suite.suite_user_service.member.security.JwtAuthenticationToken;
 import com.suite.suite_user_service.member.security.JwtCreator;
 import com.suite.suite_user_service.member.security.JwtInfoExtractor;
 import com.suite.suite_user_service.member.security.JwtValidator;
+import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,7 +55,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private JwtAuthenticationToken getAuthenticationToken(Claims claims, ServletRequest request) {
         String username = claims.getSubject();
-        String role = claims.get(JwtCreator.ROLE).toString();
+        String role = claims.get(AuthorizerDto.ClaimName.ROLE.getValue()).toString();
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(username, null, authorities, claims);
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails((HttpServletRequest) request));
