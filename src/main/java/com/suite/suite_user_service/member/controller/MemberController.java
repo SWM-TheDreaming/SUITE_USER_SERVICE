@@ -62,7 +62,8 @@ public class MemberController {
     }
 
     @PatchMapping("/m/update")
-    public ResponseEntity<Message> updateSuiteProfile(@Valid @RequestBody ReqUpdateMemberDto reqUpdateMemberDto) {
+    public ResponseEntity<Message> updateSuiteProfile(@Valid @RequestBody ReqUpdateMemberDto reqUpdateMemberDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
         return ResponseEntity.ok(memberService.updateMemberInfo(getSuiteAuthorizer(), reqUpdateMemberDto));
     }
 
