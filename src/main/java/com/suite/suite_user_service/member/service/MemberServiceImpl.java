@@ -22,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final JwtCreator jwtTokenProvider;
+    private final JwtCreator jwtCreator;
 
 
     @Override
@@ -34,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
         else if(member.getAccountStatus().equals(AccountStatus.DISABLED.getStatus()))
             throw new CustomException(StatusCode.DISABLED_ACCOUNT);
 
-        Token token = jwtTokenProvider.createToken(member);
+        Token token = jwtCreator.createToken(member);
 
         refreshTokenRepository.save(
                 RefreshToken.builder()
@@ -82,15 +82,4 @@ public class MemberServiceImpl implements MemberService {
 
         return new Message(StatusCode.OK);
     }
-
-    private Boolean isActiveMember(Member member) {
-        if (member.getAccountStatus() == String.valueOf(AccountStatus.ACTIVATE)){
-            return true;
-        }
-
-        return false;
-    }
-
-
-
 }

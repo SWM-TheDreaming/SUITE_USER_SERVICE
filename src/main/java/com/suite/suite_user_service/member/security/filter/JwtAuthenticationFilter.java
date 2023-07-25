@@ -1,7 +1,6 @@
 package com.suite.suite_user_service.member.security.filter;
 
 import com.suite.suite_user_service.member.security.JwtAuthenticationToken;
-import com.suite.suite_user_service.member.security.JwtCreator;
 import com.suite.suite_user_service.member.security.JwtInfoExtractor;
 import com.suite.suite_user_service.member.security.JwtValidator;
 import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
