@@ -36,14 +36,12 @@ public class ReqSignUpMemberDto {
     @Pattern(regexp = "^\\d{6}-\\d{1}$")
     private String securityNum;
 
-    private String preferStudy;
+    private StudyCategory preferStudy;
 
-    private String location;
-
-    private String studyMethod;
+    private StudyType studyMethod;
 
     @Builder
-    public ReqSignUpMemberDto(String email, String password, String role, String name, String nickName, String phone, String securityNum, String preferStudy, String location, String studyMethod) {
+    public ReqSignUpMemberDto(String email, String password, String role, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod) {
         this.email = email;
         this.password = password;
         this.role = role;
@@ -52,7 +50,6 @@ public class ReqSignUpMemberDto {
         this.phone = phone;
         this.securityNum = securityNum;
         this.preferStudy = preferStudy;
-        this.location = location;
         this.studyMethod = studyMethod;
     }
 
@@ -74,7 +71,6 @@ public class ReqSignUpMemberDto {
                 .phone(phone)
                 .securityNum(securityNum)
                 .preferStudy(preferStudy)
-                .location(location)
                 .studyMethod(studyMethod).build();
     }
 

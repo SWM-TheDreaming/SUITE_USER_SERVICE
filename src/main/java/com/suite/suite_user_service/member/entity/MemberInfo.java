@@ -2,7 +2,8 @@ package com.suite.suite_user_service.member.entity;
 
 import com.suite.suite_user_service.member.dto.ReqSignUpMemberDto;
 import com.suite.suite_user_service.member.dto.ReqUpdateMemberDto;
-import lombok.AllArgsConstructor;
+import com.suite.suite_user_service.member.dto.StudyCategory;
+import com.suite.suite_user_service.member.dto.StudyType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,20 +34,19 @@ public class MemberInfo {
     private String securityNum;
 
     @Column(name = "prefer_study")
-    private String preferStudy;
-
-    @Column(name = "location")
-    private String location;
+    @Enumerated(EnumType.STRING)
+    private StudyCategory preferStudy;
 
     @Column(name = "study_method")
-    private String studyMethod;
+    @Enumerated(EnumType.STRING)
+    private StudyType studyMethod;
 
 
     //프로필 이미지
     //private ProfileImage profileImage;
 
     @Builder
-    public MemberInfo(Long memberInfoId, Member memberId, String name, String nickname, String phone, String securityNum, String preferStudy, String location, String studyMethod) {
+    public MemberInfo(Long memberInfoId, Member memberId, String name, String nickname, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod) {
         this.memberInfoId = memberInfoId;
         this.memberId = memberId;
         this.name = name;
@@ -54,7 +54,6 @@ public class MemberInfo {
         this.phone = phone;
         this.securityNum = securityNum;
         this.preferStudy = preferStudy;
-        this.location = location;
         this.studyMethod = studyMethod;
     }
 
@@ -65,7 +64,6 @@ public class MemberInfo {
                 .phone(phone)
                 .securityNum(securityNum)
                 .preferStudy(preferStudy)
-                .location(location)
                 .studyMethod(studyMethod).build();
     }
 
@@ -77,7 +75,6 @@ public class MemberInfo {
         this.nickname = reqUpdateMemberDto.getNickName();
         this.phone = reqUpdateMemberDto.getPhone();
         this.preferStudy = reqUpdateMemberDto.getPreferStudy();
-        this.location = reqUpdateMemberDto.getLocation();
         this.studyMethod = reqUpdateMemberDto.getStudyMethod();
     }
 }

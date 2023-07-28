@@ -1,11 +1,14 @@
 package com.suite.suite_user_service.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.suite.suite_user_service.member.dto.AccountStatus;
 import com.suite.suite_user_service.member.dto.ResMemberInfoDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +36,10 @@ public class Member {
     @OneToOne(mappedBy = "memberId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MemberInfo memberInfo;
 
+    @OneToMany(mappedBy = "memberId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Mark> markList = new ArrayList<>();
+
     @Builder
     public Member(String email, String password, String role, String accountStatus) {
         this.email = email;
@@ -41,7 +48,7 @@ public class Member {
         this.accountStatus = accountStatus;
     }
 
-    public ResMemberInfoDto entityToDto() {
+    public ResMemberInfoDto toResMemberInfoDto() {
         return ResMemberInfoDto.builder()
                 .memberId(memberId)
                 .email(email)
@@ -50,7 +57,6 @@ public class Member {
                 .phone(memberInfo.getPhone())
                 .securityNum(memberInfo.getSecurityNum())
                 .preferStudy(memberInfo.getPreferStudy())
-                .location(memberInfo.getLocation())
                 .studyMethod(memberInfo.getStudyMethod())
                 .accountStatus(accountStatus).build();
     }

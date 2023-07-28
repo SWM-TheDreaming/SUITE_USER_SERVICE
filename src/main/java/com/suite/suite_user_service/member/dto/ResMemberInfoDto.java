@@ -13,13 +13,12 @@ public class ResMemberInfoDto {
     private String nickName;
     private String phone;
     private String securityNum;
-    private String preferStudy;
-    private String location;
-    private String studyMethod;
+    private StudyCategory preferStudy;
+    private StudyType studyMethod;
     private String accountStatus;
 
     @Builder
-    public ResMemberInfoDto(Long memberId, String email, String name, String nickName, String phone, String securityNum, String preferStudy, String location, String studyMethod, String accountStatus) {
+    public ResMemberInfoDto(Long memberId, String email, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String accountStatus) {
         this.memberId = memberId;
         this.email = email;
         this.name = name;
@@ -27,7 +26,6 @@ public class ResMemberInfoDto {
         this.phone = phone;
         this.securityNum = securityNum;
         this.preferStudy = preferStudy;
-        this.location = location;
         this.studyMethod = studyMethod;
         this.accountStatus = accountStatus;
     }

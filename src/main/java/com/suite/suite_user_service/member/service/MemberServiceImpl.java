@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Message getMemberInfo(AuthorizerDto authorizerDto) {
         Member member = memberRepository.findByEmail(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
-        return new Message(StatusCode.OK, member.entityToDto());
+        return new Message(StatusCode.OK, member.toResMemberInfoDto());
     }
 
 

@@ -13,7 +13,6 @@ public class ReqUpdateMemberDto {
     @Pattern(regexp = "^01[0-9]{1}-[0-9]{4}-[0-9]{4}$")
     private String phone;
 
-    private String preferStudy;
-    private String location;
-    private String studyMethod;
+    private StudyCategory preferStudy;
+    private StudyType studyMethod;
 }
