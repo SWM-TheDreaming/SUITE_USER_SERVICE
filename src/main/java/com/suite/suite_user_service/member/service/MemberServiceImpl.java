@@ -53,9 +53,7 @@ public class MemberServiceImpl implements MemberService {
     public Message getAuthSuiteToken(String accessToken, String userAgent) {
         ReqSignInMemberDto reqSignInMemberDto = kakaoAuth.getKakaoMemberInfo(accessToken);
 
-        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> {
-            return getSuiteToken(reqSignInMemberDto, userAgent);
-        });
+        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> getSuiteToken(reqSignInMemberDto, userAgent));
         return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.OK, reqSignInMemberDto));
     }
 
