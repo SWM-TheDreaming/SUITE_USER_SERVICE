@@ -5,12 +5,14 @@ import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 
 public interface MemberService {
 
-    Message getSuiteToken(ReqSignInMemberDto reqSignInMemberDto, String userAgent);
-    Message saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto);
-    Message getMemberInfo(AuthorizerDto authorizerDto);
+    Token getSuiteToken(ReqSignInMemberDto reqSignInMemberDto, String userAgent);
 
-    Message updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto);
+    Message getAuthSuiteToken(String accessToken, String userAgent);
+    void saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto);
+    ResMemberInfoDto getMemberInfo(AuthorizerDto authorizerDto);
 
-    Message withdrawalMember(AuthorizerDto authorizerDto);
+    void updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto);
+
+    void withdrawalMember(AuthorizerDto authorizerDto);
 
 }

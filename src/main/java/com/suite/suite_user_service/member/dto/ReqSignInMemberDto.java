@@ -1,5 +1,6 @@
 package com.suite.suite_user_service.member.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,12 @@ public class ReqSignInMemberDto {
 
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%#?&])[A-Za-z\\d@$!%*#?&]{10,}$")
     private String password;
+
+    @Builder
+    public ReqSignInMemberDto(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);

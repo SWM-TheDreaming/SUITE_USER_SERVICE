@@ -27,6 +27,11 @@ public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint
             return;
         }
 
+        if(exception.equals("MalformedJwtException")) {
+            statusCode = StatusCode.MALFORMED;
+            setResponse(response, statusCode);
+            return;
+        }
 
         if(exception.equals("PasswordNotFoundException")) {
             statusCode = StatusCode.PASSWORD_NOT_FOUND;
