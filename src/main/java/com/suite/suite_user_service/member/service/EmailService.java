@@ -19,12 +19,9 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class EmailService {
     private final ConfigUtil configUtil;
-    private final MemberRepository memberRepository;
     private final JavaMailSender emailSender;
 
     public EmailDto sendEmailCode(EmailDto emailDto) {
-        memberRepository.findByEmail(emailDto.getEmail()).ifPresent(
-                e -> {throw new CustomException(StatusCode.REGISTERED_EMAIL);});
         emailDto.setCode(createCode());
         try {
             MimeMessage emailForm = createEmailForm(emailDto.getEmail(), emailDto.getCode());

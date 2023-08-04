@@ -88,4 +88,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByEmail(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
         member.updateAccountStatus();
     }
+
+    @Override
+    public void checkEmail(EmailDto emailDto) {
+        memberRepository.findByEmail(emailDto.getEmail()).ifPresent(
+                e -> {throw new CustomException(StatusCode.REGISTERED_EMAIL);});
+    }
 }

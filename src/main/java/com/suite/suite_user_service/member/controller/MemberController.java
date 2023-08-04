@@ -38,11 +38,19 @@ public class MemberController {
     }
 
     @PostMapping("/auth/mail")
-    public ResponseEntity<Message> verifyEmail(@Valid @RequestBody EmailDto emailDto, BindingResult bindingResult) {
+    public ResponseEntity<Message> sendEmailCode(@Valid @RequestBody EmailDto emailDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
         EmailDto resEmailCode = emailService.sendEmailCode(emailDto);
         return ResponseEntity.ok(new Message(StatusCode.OK, resEmailCode));
     }
+
+    @PostMapping("/verification/email")
+    public ResponseEntity<Message> verifyEmail(@Valid @RequestBody EmailDto emailDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
+        memberService.checkEmail(emailDto);
+        return ResponseEntity.ok(new Message(StatusCode.OK));
+    }
+
 
     @PostMapping("/signin")
     public ResponseEntity<Message> loginSuite(@Valid @RequestBody ReqSignInMemberDto reqSignInMemberDto, BindingResult bindingResult, @RequestHeader("User-Agent") String userAgent) {
@@ -55,6 +63,8 @@ public class MemberController {
     public ResponseEntity<Message> loginAuthSuite(@RequestBody Map<String, String> token, @RequestHeader("User-Agent") String userAgent) {
         return ResponseEntity.ok(memberService.getAuthSuiteToken(token.get("access_token"), userAgent));
     }
+
+
 
     @PostMapping("/id")
     public ResponseEntity<Message> findSuiteId() {

@@ -15,4 +15,6 @@ public interface MemberService {
 
     void withdrawalMember(AuthorizerDto authorizerDto);
 
+    public void checkEmail(EmailDto emailDto);
+
 }
