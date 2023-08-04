@@ -55,13 +55,13 @@ public class MemberController {
     @PostMapping("/signin")
     public ResponseEntity<Message> loginSuite(@Valid @RequestBody ReqSignInMemberDto reqSignInMemberDto, BindingResult bindingResult, @RequestHeader("User-Agent") String userAgent) {
         if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
-        Token token = memberService.getSuiteToken(reqSignInMemberDto, userAgent);
+        Token token = memberService.getSuiteToken(reqSignInMemberDto, userAgent, passwordEncoder);
         return ResponseEntity.ok(new Message(StatusCode.OK, token));
     }
 
     @PostMapping("/auth/signin")
     public ResponseEntity<Message> loginAuthSuite(@RequestBody Map<String, String> token, @RequestHeader("User-Agent") String userAgent) {
-        return ResponseEntity.ok(memberService.getAuthSuiteToken(token.get("access_token"), userAgent));
+        return ResponseEntity.ok(memberService.getAuthSuiteToken(token.get("access_token"), userAgent, passwordEncoder));
     }
 
 

@@ -52,12 +52,6 @@ public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint
             return;
         }
 
-        //아이디 비밀번호가 다를 경우
-        if(exception.equals("UsernameOrPasswordNotFoundException")) {
-            statusCode = StatusCode.USERNAME_OR_PASSWORD_NOT_FOUND;
-            setResponse(response, statusCode);
-            return;
-        }
 
     }
 

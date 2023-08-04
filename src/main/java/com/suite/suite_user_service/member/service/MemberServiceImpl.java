@@ -1,7 +1,6 @@
 package com.suite.suite_user_service.member.service;
 
 import com.suite.suite_user_service.member.auth.KakaoAuth;
-import com.suite.suite_user_service.member.controller.MemberController;
 import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.entity.Member;
 import com.suite.suite_user_service.member.entity.MemberInfo;
@@ -14,6 +13,8 @@ import com.suite.suite_user_service.member.repository.RefreshTokenRepository;
 import com.suite.suite_user_service.member.security.JwtCreator;
 import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
+
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -31,10 +33,12 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public Token getSuiteToken(ReqSignInMemberDto reqSignInMemberDto, String userAgent) {
-        Member member = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.USERNAME_OR_PASSWORD_NOT_FOUND));
+    public Token getSuiteToken(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder) {
+        Member member = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.USERNAME_NOT_FOUND));
 
-        if(member.getAccountStatus().equals(AccountStatus.DORMANT.getStatus()))
+        if(!passwordEncoder.matches(reqSignInMemberDto.getPassword(), member.getPassword()))
+            throw new CustomException(StatusCode.INVALID_PASSWORD);
+        else if(member.getAccountStatus().equals(AccountStatus.DORMANT.getStatus()))
             throw new CustomException(StatusCode.DORMANT_ACCOUNT);
         else if(member.getAccountStatus().equals(AccountStatus.DISABLED.getStatus()))
             throw new CustomException(StatusCode.DISABLED_ACCOUNT);
@@ -48,12 +52,14 @@ public class MemberServiceImpl implements MemberService {
                         .userAgent(userAgent).build());
 
         return token;
+
     }
 
-    public Message getAuthSuiteToken(String accessToken, String userAgent) {
+    @Override
+    public Message getAuthSuiteToken( String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
         ReqSignInMemberDto reqSignInMemberDto = kakaoAuth.getKakaoMemberInfo(accessToken);
 
-        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> getSuiteToken(reqSignInMemberDto, userAgent));
+        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> getSuiteToken(reqSignInMemberDto, userAgent, passwordEncoder));
         return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.OK, reqSignInMemberDto));
     }
 
