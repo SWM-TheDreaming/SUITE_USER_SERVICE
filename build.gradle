@@ -2,11 +2,25 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.14'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'com.google.cloud.tools.jib' version '3.2.0'
 }
 
 group = 'com.suite'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+jib {
+    from {
+        image = "adoptopenjdk/openjdk11:jre-11.0.11_9-alpine"
+    }
+    to {
+        image = "zxz4641/k-suite-user"
+        tags = ["spring-user"]
+    }
+    container {
+        jvmFlags = ["-Xms128m", "-Xmx128m"]
+    }
+}
 
 configurations {
     compileOnly {
