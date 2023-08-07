@@ -11,13 +11,13 @@ public class Message {
     private Object data;
 
     public Message(StatusCode statusCode, Object data) {
-        this.statusCode = statusCode.getCode();
+        this.statusCode = statusCode.getStatusCode();
         this.message = statusCode.getMessage();
         this.data = data;
     }
 
     public Message(StatusCode statusCode) {
-        this.statusCode = statusCode.getCode();
+        this.statusCode = statusCode.getStatusCode();
         this.message = statusCode.getMessage();
         this.data = DEFAULT_RESPONSE;
     }

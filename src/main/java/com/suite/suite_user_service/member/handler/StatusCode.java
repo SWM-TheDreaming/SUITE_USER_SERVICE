@@ -24,21 +24,21 @@ public enum StatusCode {
     INVALID_DATA_FORMAT(400, "형식이 맞지 않습니다.", HttpStatus.BAD_REQUEST),
     ;
     @Getter
-    private int code;
+    private int statusCode;
     @Getter
     private String message;
     @Getter
     private HttpStatus status;
 
-    StatusCode(int code, String message, HttpStatus status) {
-        this.code = code;
+    StatusCode(int statusCode, String message, HttpStatus status) {
+        this.statusCode = statusCode;
         this.message = message;
         this.status = status;
     }
 
     public String toString() {
         return "{" +
-                "\"code\" : " + "\""+code+"\"" +
+                "\"code\" : " + "\""+ statusCode +"\"" +
                 "\"status\" : " + "\""+status+"\"" +
                 "\"message\" : " + "\""+message+"\"" +
                 "}";

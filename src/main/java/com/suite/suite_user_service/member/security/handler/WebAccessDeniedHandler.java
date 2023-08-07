@@ -22,7 +22,7 @@ public class WebAccessDeniedHandler implements AccessDeniedHandler {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         JSONObject json = new JSONObject();
-        json.put("code", statusCode.getCode());
+        json.put("statusCode", statusCode.getStatusCode());
         json.put("message", statusCode.getMessage());
         response.getWriter().print(json);
     }
