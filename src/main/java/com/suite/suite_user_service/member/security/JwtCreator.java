@@ -55,7 +55,7 @@ public class JwtCreator {
                 .claim(AuthorizerDto.ClaimName.ACCOUNTSTATUS.getValue(), member.getAccountStatus())
                 .claim(AuthorizerDto.ClaimName.ROLE.getValue(), member.getRole())
                 .setIssuedAt(currentTime)  //토큰 발행시간 정보
-                .setExpiration(new Date(currentTime.getTime() + tokenValidTime)) //Expire Time
+                .setExpiration(null) //Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey)  //암호화 알고리즘
                 .compact();
 

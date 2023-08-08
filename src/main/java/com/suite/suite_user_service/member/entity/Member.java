@@ -33,6 +33,9 @@ public class Member {
     @Column(name = "account_status")
     private String accountStatus;
 
+    @Column(name = "is_auth")
+    private boolean isAuth;
+
     @OneToOne(mappedBy = "memberId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MemberInfo memberInfo;
 
@@ -41,11 +44,12 @@ public class Member {
     private List<Mark> markList = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String role, String accountStatus) {
+    public Member(String email, String password, String role, String accountStatus, boolean isAuth) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.accountStatus = accountStatus;
+        this.isAuth = isAuth;
     }
 
     public ResMemberInfoDto toResMemberInfoDto() {
@@ -58,7 +62,8 @@ public class Member {
                 .securityNum(memberInfo.getSecurityNum())
                 .preferStudy(memberInfo.getPreferStudy())
                 .studyMethod(memberInfo.getStudyMethod())
-                .accountStatus(accountStatus).build();
+                .accountStatus(accountStatus)
+                .isAuth(isAuth).build();
     }
 
     public void addMemberInfo(MemberInfo memberInfo) {

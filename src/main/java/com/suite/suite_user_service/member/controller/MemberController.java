@@ -64,8 +64,6 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getAuthSuiteToken(token.get("access_token"), userAgent, passwordEncoder));
     }
 
-
-
     @PostMapping("/id")
     public ResponseEntity<Message> findSuiteId() {
         return null;
