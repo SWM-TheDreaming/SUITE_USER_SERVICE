@@ -55,11 +55,19 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+    private Token verifyAuthAccount(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder) {
+        Member member = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.USERNAME_NOT_FOUND));
+
+        //
+
+        return null;
+    }
+
     @Override
     public Message getAuthSuiteToken( String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
         ReqSignInMemberDto reqSignInMemberDto = kakaoAuth.getKakaoMemberInfo(accessToken);
 
-        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> getSuiteToken(reqSignInMemberDto, userAgent, passwordEncoder));
+        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyAuthAccount(reqSignInMemberDto, userAgent, passwordEncoder));
         return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.OK, reqSignInMemberDto));
     }
 

@@ -35,7 +35,7 @@ public class KakaoAuth {
             while((line = br.readLine()) != null) {
                 result += line;
             }
-
+            System.out.println("result : " + result);
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
