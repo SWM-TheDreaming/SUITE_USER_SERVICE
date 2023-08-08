@@ -58,9 +58,17 @@ public class MemberServiceImpl implements MemberService {
     private Token verifyAuthAccount(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder) {
         Member member = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.USERNAME_NOT_FOUND));
 
-        //
+        if(!passwordEncoder.matches(reqSignInMemberDto.getPassword(), member.getPassword()))
+            throw new CustomException(StatusCode.REGISTERED_EMAIL);
 
-        return null;
+        Token token = jwtCreator.createToken(member);
+
+        refreshTokenRepository.save(
+                RefreshToken.builder()
+                        .keyId(token.getKey())
+                        .refreshToken(token.getRefreshToken())
+                        .userAgent(userAgent).build());
+        return token;
     }
 
     @Override
@@ -68,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
         ReqSignInMemberDto reqSignInMemberDto = kakaoAuth.getKakaoMemberInfo(accessToken);
 
         Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyAuthAccount(reqSignInMemberDto, userAgent, passwordEncoder));
-        return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.OK, reqSignInMemberDto));
+        return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.CREATED, reqSignInMemberDto));
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public enum StatusCode {
     OK(200, "OK", HttpStatus.OK),
-
+    CREATED(201, "회원가입이 필요합니다.", HttpStatus.CREATED),
     DISABLED_ACCOUNT(403, "삭제된 계정입니다.", HttpStatus.FORBIDDEN),
     DORMANT_ACCOUNT(423, "이 계정은 휴먼 계정입니다.", HttpStatus.LOCKED),
     MALFORMED(400, "형식이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
