@@ -18,10 +18,12 @@ public class ReqSignInMemberDto {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%#?&])[A-Za-z\\d@$!%*#?&]{10,}$")
     private String password;
 
+    private boolean isAuth;
     @Builder
-    public ReqSignInMemberDto(String email, String password) {
+    public ReqSignInMemberDto(String email, String password, boolean isAuth) {
         this.email = email;
         this.password = password;
+        this.isAuth = isAuth;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
