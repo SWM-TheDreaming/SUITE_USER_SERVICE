@@ -13,7 +13,6 @@ import com.suite.suite_user_service.member.repository.RefreshTokenRepository;
 import com.suite.suite_user_service.member.security.JwtCreator;
 import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    private Token verifyAuthAccount(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder) {
+    private Token verifyOauthAccount(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder) {
         Member member = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.USERNAME_NOT_FOUND));
 
         if(!passwordEncoder.matches(reqSignInMemberDto.getPassword(), member.getPassword()))
@@ -72,10 +71,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Message getAuthSuiteToken( String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
+    public Message getOauthSuiteToken( String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
         ReqSignInMemberDto reqSignInMemberDto = kakaoAuth.getKakaoMemberInfo(accessToken);
 
-        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyAuthAccount(reqSignInMemberDto, userAgent, passwordEncoder));
+        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyOauthAccount(reqSignInMemberDto, userAgent, passwordEncoder));
         return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.CREATED, reqSignInMemberDto));
     }
 

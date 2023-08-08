@@ -61,7 +61,7 @@ public class MemberController {
 
     @PostMapping("/auth/signin")
     public ResponseEntity<Message> loginAuthSuite(@RequestBody Map<String, String> token, @RequestHeader("User-Agent") String userAgent) {
-        return ResponseEntity.ok(memberService.getAuthSuiteToken(token.get("access_token"), userAgent, passwordEncoder));
+        return ResponseEntity.ok(memberService.getOauthSuiteToken(token.get("access_token"), userAgent, passwordEncoder));
     }
 
     @PostMapping("/id")

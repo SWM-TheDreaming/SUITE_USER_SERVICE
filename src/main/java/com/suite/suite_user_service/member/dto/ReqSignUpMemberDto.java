@@ -39,10 +39,10 @@ public class ReqSignUpMemberDto {
     private StudyCategory preferStudy;
 
     private StudyType studyMethod;
-    private boolean isAuth;
+    private boolean isOauth;
 
     @Builder
-    public ReqSignUpMemberDto(String email, String password, String role, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, boolean isAuth) {
+    public ReqSignUpMemberDto(String email, String password, String role, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, boolean isOauth) {
         this.email = email;
         this.password = password;
         this.role = role;
@@ -52,7 +52,7 @@ public class ReqSignUpMemberDto {
         this.securityNum = securityNum;
         this.preferStudy = preferStudy;
         this.studyMethod = studyMethod;
-        this.isAuth = isAuth;
+        this.isOauth = isOauth;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
@@ -63,7 +63,7 @@ public class ReqSignUpMemberDto {
                 .email(email)
                 .password(password)
                 .role(Role.from(role))
-                .isAuth(isAuth)
+                .isOauth(isOauth)
                 .accountStatus(AccountStatus.ACTIVATE.getStatus()).build();
     }
 

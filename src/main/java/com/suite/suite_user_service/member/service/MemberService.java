@@ -10,7 +10,7 @@ public interface MemberService {
 
     Token getSuiteToken(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder);
 
-    Message getAuthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder);
+    Message getOauthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder);
     void saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto);
     ResMemberInfoDto getMemberInfo(AuthorizerDto authorizerDto);
 
