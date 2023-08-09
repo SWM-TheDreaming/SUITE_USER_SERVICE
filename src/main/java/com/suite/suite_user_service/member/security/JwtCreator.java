@@ -1,16 +1,13 @@
 package com.suite.suite_user_service.member.security;
 
 
-import com.suite.suite_user_service.member.config.ConfigUtil;
 import com.suite.suite_user_service.member.dto.Token;
 import com.suite.suite_user_service.member.entity.Member;
 import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.PostConstruct;
 import java.util.Base64;
 import java.util.Date;
@@ -19,19 +16,20 @@ import java.util.Date;
 @Component
 public class JwtCreator {
 
-    private final ConfigUtil configUtil;
 
+    @Value("${jwt.access.key}")
     private String accessSecretKey;
+    @Value("${jwt.refresh.key")
     private String refreshSecretKey;
+    @Value("${jwt.access.validtime}")
     private long accessTokenValidTime;
+    @Value("$jwt.refresh.validtime")
     private long refreshTokenValidTime;
 
     @PostConstruct
     protected void init() {
-        accessSecretKey = Base64.getEncoder().encodeToString(configUtil.getProperty("jwt.access.key").getBytes());
-        refreshSecretKey = Base64.getEncoder().encodeToString(configUtil.getProperty("jwt.refresh.key").getBytes());
-        accessTokenValidTime = Long.parseLong(configUtil.getProperty("jwt.access.validtime"));
-        refreshTokenValidTime = Long.parseLong(configUtil.getProperty("jwt.refresh.validtime"));
+        accessSecretKey = Base64.getEncoder().encodeToString(accessSecretKey.getBytes());
+        refreshSecretKey = Base64.getEncoder().encodeToString(refreshSecretKey.getBytes());
     }
 
     // 토큰 생성
