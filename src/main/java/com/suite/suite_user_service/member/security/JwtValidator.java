@@ -1,6 +1,5 @@
 package com.suite.suite_user_service.member.security;
 
-import com.suite.suite_user_service.member.config.ConfigUtil;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

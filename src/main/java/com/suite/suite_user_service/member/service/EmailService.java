@@ -1,11 +1,8 @@
 package com.suite.suite_user_service.member.service;
 
-import com.suite.suite_user_service.member.config.ConfigUtil;
 import com.suite.suite_user_service.member.dto.EmailDto;
-import com.suite.suite_user_service.member.dto.Message;
 import com.suite.suite_user_service.member.handler.CustomException;
 import com.suite.suite_user_service.member.handler.StatusCode;
-import com.suite.suite_user_service.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
