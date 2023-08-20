@@ -63,7 +63,7 @@ public class Member {
                 .preferStudy(memberInfo.getPreferStudy())
                 .studyMethod(memberInfo.getStudyMethod())
                 .accountStatus(accountStatus)
-                .isAuth(isOauth).build();
+                .isOauth(isOauth).build();
     }
 
     public void addMemberInfo(MemberInfo memberInfo) {

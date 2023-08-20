@@ -4,6 +4,7 @@ import com.suite.suite_user_service.member.dto.EmailDto;
 import com.suite.suite_user_service.member.handler.CustomException;
 import com.suite.suite_user_service.member.handler.StatusCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,8 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-    private final ConfigUtil configUtil;
+    @Value("${spring.mail.username}")
+    private String setFrom;
     private final JavaMailSender emailSender;
 
     public EmailDto sendEmailCode(EmailDto emailDto) {
@@ -56,7 +58,6 @@ public class EmailService {
     private MimeMessage createEmailForm(String email, String authCode) throws MessagingException, UnsupportedEncodingException {
 
         createCode(); //인증 코드 생성
-        String setFrom = configUtil.getProperty("spring.mail.username"); //email-config에 설정한 자신의 이메일 주소(보내는 사람)
         String toEmail = email; //받는 사람
         String title = "Suite 회원가입 인증 번호"; //제목
 

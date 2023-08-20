@@ -23,7 +23,7 @@ public class JwtCreator {
     private String refreshSecretKey;
     @Value("${jwt.access.validtime}")
     private long accessTokenValidTime;
-    @Value("$jwt.refresh.validtime")
+    @Value("${jwt.refresh.validtime}")
     private long refreshTokenValidTime;
 
     @PostConstruct

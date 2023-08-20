@@ -44,7 +44,7 @@ public class KakaoAuth {
             return ReqSignInMemberDto.builder()
                     .email(kakaoAccount.getAsJsonObject().get("email").getAsString())
                     .password(element.getAsJsonObject().get("id").getAsString())
-                    .isAuth(true).build();
+                    .isOauth(true).build();
 
         } catch (MalformedURLException e) {
             throw new CustomException(StatusCode.MALFORMED);
