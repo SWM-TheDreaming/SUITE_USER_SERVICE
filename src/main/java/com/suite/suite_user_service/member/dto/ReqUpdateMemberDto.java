@@ -15,4 +15,5 @@ public class ReqUpdateMemberDto {
 
     private StudyCategory preferStudy;
     private StudyType studyMethod;
+    private String profileImage;
 }

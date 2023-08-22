@@ -40,9 +40,10 @@ public class ReqSignUpMemberDto {
 
     private StudyType studyMethod;
     private boolean isOauth;
+    private String profileImage;
 
     @Builder
-    public ReqSignUpMemberDto(String email, String password, String role, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, boolean isOauth) {
+    public ReqSignUpMemberDto(String email, String password, String role, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, boolean isOauth, String profileImage) {
         this.email = email;
         this.password = password;
         this.role = role;
@@ -53,6 +54,7 @@ public class ReqSignUpMemberDto {
         this.preferStudy = preferStudy;
         this.studyMethod = studyMethod;
         this.isOauth = isOauth;
+        this.profileImage = profileImage;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {

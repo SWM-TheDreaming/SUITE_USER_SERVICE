@@ -41,12 +41,11 @@ public class MemberInfo {
     @Enumerated(EnumType.STRING)
     private StudyType studyMethod;
 
-
     //프로필 이미지
-    //private ProfileImage profileImage;
+    private String profileImage;
 
     @Builder
-    public MemberInfo(Long memberInfoId, Member memberId, String name, String nickname, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod) {
+    public MemberInfo(Long memberInfoId, Member memberId, String name, String nickname, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String profileImage) {
         this.memberInfoId = memberInfoId;
         this.memberId = memberId;
         this.name = name;
@@ -55,6 +54,7 @@ public class MemberInfo {
         this.securityNum = securityNum;
         this.preferStudy = preferStudy;
         this.studyMethod = studyMethod;
+        this.profileImage = profileImage;
     }
 
     public ReqSignUpMemberDto entityToDto() {
@@ -67,6 +67,10 @@ public class MemberInfo {
                 .studyMethod(studyMethod).build();
     }
 
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
     public void setMemberId(Member memberId) {
         this.memberId = memberId;
     }
@@ -76,5 +80,6 @@ public class MemberInfo {
         this.phone = reqUpdateMemberDto.getPhone();
         this.preferStudy = reqUpdateMemberDto.getPreferStudy();
         this.studyMethod = reqUpdateMemberDto.getStudyMethod();
+        this.profileImage = reqUpdateMemberDto.getProfileImage();
     }
 }

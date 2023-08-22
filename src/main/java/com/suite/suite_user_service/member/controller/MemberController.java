@@ -7,10 +7,12 @@ import com.suite.suite_user_service.member.service.EmailService;
 import com.suite.suite_user_service.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.validation.Valid;
@@ -29,11 +31,11 @@ public class MemberController {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/signup")
-    public ResponseEntity<Message> signupSuite(@Valid @RequestBody ReqSignUpMemberDto reqSignUpMemberDto, BindingResult bindingResult) {
+    @PostMapping(value = "/signup", consumes = {"multipart/form-data"})
+    public ResponseEntity<Message> signupSuite(@Valid @RequestPart ReqSignUpMemberDto reqSignUpMemberDto, BindingResult bindingResult, @RequestPart(required = false) MultipartFile file) {
         if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
         reqSignUpMemberDto.encodePassword(passwordEncoder);
-        memberService.saveMemberInfo(reqSignUpMemberDto);
+        memberService.saveMemberInfo(reqSignUpMemberDto, file);
         return ResponseEntity.ok(new Message(StatusCode.OK));
     }
 
