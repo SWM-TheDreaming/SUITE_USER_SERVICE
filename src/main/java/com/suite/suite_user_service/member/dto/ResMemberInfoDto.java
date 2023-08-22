@@ -17,9 +17,10 @@ public class ResMemberInfoDto {
     private StudyType studyMethod;
     private String accountStatus;
     private boolean isOauth;
+    private String profileURL;
 
     @Builder
-    public ResMemberInfoDto(Long memberId, String email, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String accountStatus, boolean isOauth) {
+    public ResMemberInfoDto(Long memberId, String email, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String accountStatus, boolean isOauth, String profileURL) {
         this.memberId = memberId;
         this.email = email;
         this.name = name;
@@ -30,5 +31,6 @@ public class ResMemberInfoDto {
         this.studyMethod = studyMethod;
         this.accountStatus = accountStatus;
         this.isOauth = isOauth;
+        this.profileURL = profileURL;
     }
 }

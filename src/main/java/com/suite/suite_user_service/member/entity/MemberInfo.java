@@ -80,6 +80,5 @@ public class MemberInfo {
         this.phone = reqUpdateMemberDto.getPhone();
         this.preferStudy = reqUpdateMemberDto.getPreferStudy();
         this.studyMethod = reqUpdateMemberDto.getStudyMethod();
-        this.profileImage = reqUpdateMemberDto.getProfileImage();
     }
 }

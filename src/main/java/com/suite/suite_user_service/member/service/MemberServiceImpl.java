@@ -1,7 +1,9 @@
 package com.suite.suite_user_service.member.service;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.suite.suite_user_service.member.auth.KakaoAuth;
 import com.suite.suite_user_service.member.dto.*;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -64,7 +67,6 @@ public class MemberServiceImpl implements MemberService {
                         .userAgent(userAgent).build());
 
         return token;
-
     }
 
     @Override
@@ -83,24 +85,24 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = reqSignUpMemberDto.toMemberEntity();
         MemberInfo memberInfo = reqSignUpMemberDto.toMemberInfoEntity();
-        memberInfo.setProfileImage(saveProfileImage(file));
         member.addMemberInfo(memberInfo);
         memberRepository.save(member);
+        memberInfo.setProfileImage(saveProfileImage(member.getMemberId(), file));
         memberInfoRepository.save(memberInfo);
-
-
     }
 
     @Override
     public ResMemberInfoDto getMemberInfo(AuthorizerDto authorizerDto) {
         Member member = memberRepository.findByEmail(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
-        return member.toResMemberInfoDto();
+
+        return member.toResMemberInfoDto(getFileURL(member.getMemberInfo().getProfileImage()));
     }
 
     @Override
     @Transactional
-    public void updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto) {
+    public void updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto, MultipartFile file) {
         MemberInfo memberInfo = memberInfoRepository.findByMemberId_Email(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
+        memberInfo.setProfileImage(saveProfileImage(memberInfo.getMemberId().getMemberId(), file));
         memberInfo.updateProfile(reqUpdateMemberDto);
     }
 
@@ -132,13 +134,13 @@ public class MemberServiceImpl implements MemberService {
         return token;
     }
 
-    private String saveProfileImage(MultipartFile multiPartFile) {
+    private String saveProfileImage(Long memberId, MultipartFile multiPartFile) {
         try {
-            String fileName = parseUUID(Objects.requireNonNull(multiPartFile.getOriginalFilename()));
+            String fileName = parseUUID(memberId, Objects.requireNonNull(multiPartFile.getOriginalFilename()));
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(multiPartFile.getSize());
-            metadata.setContentType(multiPartFile.getContentType());
-
+            metadata.setContentType("image/png");
+            metadata.setContentDisposition("inline");
             amazonS3.putObject(bucket, fileName, multiPartFile.getInputStream(), metadata);
             return fileName;
         } catch (IOException e) {
@@ -147,14 +149,24 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    private String parseUUID(String fileName) {
+    private String getFileURL(String fileName) {
+        Date expiration = new Date();
+        long expTomeMillis = expiration.getTime();
+        expTomeMillis += 1000 * 60 * 60; //1hour
+        expiration.setTime(expTomeMillis);
+
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, (fileName).replace(File.separatorChar, '/'))
+                .withMethod(HttpMethod.GET)
+                .withExpiration(expiration);
+        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+    }
+
+    private String parseUUID(Long memberId, String fileName) {
         Date now = new Date();
         StringBuffer sb = new StringBuffer(FILENAME);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String uploadTime = sdf.format(now);
 
         String extension = fileName.substring(fileName.lastIndexOf("."));
-        sb.append(uploadTime);
+        sb.append(memberId);
         sb.append(extension);
 
         return sb.toString();

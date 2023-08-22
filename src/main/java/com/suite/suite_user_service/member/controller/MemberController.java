@@ -82,10 +82,10 @@ public class MemberController {
         return ResponseEntity.ok(new Message(StatusCode.OK, resMemberInfoDto));
     }
 
-    @PatchMapping("/m/update")
-    public ResponseEntity<Message> updateSuiteProfile(@Valid @RequestBody ReqUpdateMemberDto reqUpdateMemberDto, BindingResult bindingResult) {
+    @PatchMapping(value = "/m/update", consumes = {"multipart/form-data"})
+    public ResponseEntity<Message> updateSuiteProfile(@Valid @RequestPart ReqUpdateMemberDto reqUpdateMemberDto, BindingResult bindingResult, @RequestPart(required = false) MultipartFile file) {
         if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
-        memberService.updateMemberInfo(getSuiteAuthorizer(), reqUpdateMemberDto);
+        memberService.updateMemberInfo(getSuiteAuthorizer(), reqUpdateMemberDto, file);
         return ResponseEntity.ok(new Message(StatusCode.OK));
     }
 

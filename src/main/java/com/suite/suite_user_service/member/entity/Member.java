@@ -52,7 +52,7 @@ public class Member {
         this.isOauth = isOauth;
     }
 
-    public ResMemberInfoDto toResMemberInfoDto() {
+    public ResMemberInfoDto toResMemberInfoDto(String fileURL) {
         return ResMemberInfoDto.builder()
                 .memberId(memberId)
                 .email(email)
@@ -63,6 +63,7 @@ public class Member {
                 .preferStudy(memberInfo.getPreferStudy())
                 .studyMethod(memberInfo.getStudyMethod())
                 .accountStatus(accountStatus)
+                .profileURL(fileURL)
                 .isOauth(isOauth).build();
     }
 

@@ -18,6 +18,7 @@ public class JwtValidator {
     public boolean validateToken(ServletRequest request, String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(accessKey.getBytes()).parseClaimsJws(jwtToken);
+            if(claims.getBody().getExpiration() == null) return true;
             return !claims.getBody().getExpiration().before(new Date());
         } catch (SignatureException e) {
             request.setAttribute("exception", "ForbiddenException");

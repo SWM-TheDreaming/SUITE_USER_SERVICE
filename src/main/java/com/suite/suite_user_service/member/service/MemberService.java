@@ -15,7 +15,7 @@ public interface MemberService {
     void saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto, MultipartFile file);
     ResMemberInfoDto getMemberInfo(AuthorizerDto authorizerDto);
 
-    void updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto);
+    void updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto, MultipartFile file);
 
     void withdrawalMember(AuthorizerDto authorizerDto);
 
