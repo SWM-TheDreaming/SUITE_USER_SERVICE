@@ -136,6 +136,7 @@ public class MemberServiceImpl implements MemberService {
 
     private String saveProfileImage(Long memberId, MultipartFile multiPartFile) {
         try {
+            if(multiPartFile == null) return "";
             String fileName = parseUUID(memberId, Objects.requireNonNull(multiPartFile.getOriginalFilename()));
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(multiPartFile.getSize());
