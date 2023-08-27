@@ -19,6 +19,8 @@ public interface MemberService {
 
     void withdrawalMember(AuthorizerDto authorizerDto);
 
-    public void checkEmail(EmailDto emailDto);
+    void checkEmail(EmailDto emailDto);
+
+    String sendSms(String phoneNumber);
 
 }

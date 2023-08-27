@@ -2,9 +2,10 @@ package com.suite.suite_user_service.member.service;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.model.PublishResult;
 import com.suite.suite_user_service.member.auth.KakaoAuth;
 import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.entity.Member;
@@ -23,10 +24,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sns.model.PublishRequest;
+import software.amazon.awssdk.services.sns.model.PublishResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,13 +40,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    public static final String FILENAME = "SUITE_PROFILE_";
+    private static final String FILENAME = "SUITE_PROFILE_";
+    private static final String ALLOWED_CHARACTERS = "0123456789";
+    private static final int CODE_LENGTH = 6;
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtCreator jwtCreator;
     private final KakaoAuth kakaoAuth;
     private final AmazonS3 amazonS3;
+    private final SnsClient snsClient;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -118,6 +125,22 @@ public class MemberServiceImpl implements MemberService {
                 e -> {throw new CustomException(StatusCode.REGISTERED_EMAIL);});
     }
 
+    @Override
+    public String sendSms(String phoneNumber) {
+        System.out.println("number = " + phoneNumber);
+        String authCode = generateRandomNumber();
+
+        PublishRequest request = PublishRequest.builder()
+                .phoneNumber(phoneNumber)
+                .message("[SUITE] 본인 확인을 위해 인증번호 [" + authCode + "]를 입력해주세요.")
+                .build();
+        PublishResponse result = snsClient.publish(request);
+
+        System.out.println(result.messageId() + " Message sent. Status was " + result.sdkHttpResponse().statusCode());
+
+        return authCode;
+    }
+
     private Token verifyOauthAccount(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder) {
         Member member = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.USERNAME_NOT_FOUND));
 
@@ -171,5 +194,18 @@ public class MemberServiceImpl implements MemberService {
         sb.append(extension);
 
         return sb.toString();
+    }
+
+    private String generateRandomNumber() {
+        SecureRandom secureRandom = new SecureRandom();
+        StringBuilder stringBuilder = new StringBuilder(CODE_LENGTH);
+
+        for (int i = 0; i < CODE_LENGTH; i++) {
+            int randomIndex = secureRandom.nextInt(ALLOWED_CHARACTERS.length());
+            char randomChar = ALLOWED_CHARACTERS.charAt(randomIndex);
+            stringBuilder.append(randomChar);
+        }
+
+        return stringBuilder.toString();
     }
 }
