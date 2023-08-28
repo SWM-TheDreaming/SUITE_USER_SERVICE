@@ -11,12 +11,14 @@ import com.suite.suite_user_service.member.entity.MemberInfo;
 import com.suite.suite_user_service.member.entity.RefreshToken;
 import com.suite.suite_user_service.member.handler.CustomException;
 import com.suite.suite_user_service.member.handler.StatusCode;
+import com.suite.suite_user_service.member.kafka.producer.SuiteUserProducer;
 import com.suite.suite_user_service.member.repository.MemberInfoRepository;
 import com.suite.suite_user_service.member.repository.MemberRepository;
 import com.suite.suite_user_service.member.repository.RefreshTokenRepository;
 import com.suite.suite_user_service.member.security.JwtCreator;
 import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,9 +31,7 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -48,6 +48,7 @@ public class MemberServiceImpl implements MemberService {
     private final KakaoAuth kakaoAuth;
     private final AmazonS3 amazonS3;
     private final SnsClient snsClient;
+    private final SuiteUserProducer suiteUserProducer;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -94,6 +95,11 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
         memberInfo.setProfileImage(saveProfileImage(member.getMemberId(), file));
         memberInfoRepository.save(memberInfo);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("memberId", member.getMemberId());
+        map.put("fcm", "fcmValue");
+        suiteUserProducer.sendUserRegistrationFCMMessage(generateJSONData(map));
     }
 
     @Override
@@ -205,5 +211,13 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return stringBuilder.toString();
+    }
+
+    private String generateJSONData(Object data) {
+        JSONObject obj = new JSONObject();
+        obj.put("uuid", "UserRegistrationProducer");
+        obj.put("count", 0);
+        obj.put("data", data);
+        return obj.toJSONString();
     }
 }
