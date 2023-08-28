@@ -22,7 +22,7 @@ public class MemberInfo {
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
-    private Member memberId;
+    private Member member;
 
     private String name;
 
@@ -45,9 +45,9 @@ public class MemberInfo {
     private String profileImage;
 
     @Builder
-    public MemberInfo(Long memberInfoId, Member memberId, String name, String nickname, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String profileImage) {
+    public MemberInfo(Long memberInfoId, Member member, String name, String nickname, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String profileImage) {
         this.memberInfoId = memberInfoId;
-        this.memberId = memberId;
+        this.member = member;
         this.name = name;
         this.nickname = nickname;
         this.phone = phone;
@@ -71,8 +71,8 @@ public class MemberInfo {
         this.profileImage = profileImage;
     }
 
-    public void setMemberId(Member memberId) {
-        this.memberId = memberId;
+    public void setMember(Member memberId) {
+        this.member = memberId;
     }
 
     public void updateProfile(ReqUpdateMemberDto reqUpdateMemberDto) {

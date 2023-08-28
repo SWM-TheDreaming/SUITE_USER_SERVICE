@@ -36,10 +36,10 @@ public class Member {
     @Column(name = "is_oauth")
     private boolean isOauth;
 
-    @OneToOne(mappedBy = "memberId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MemberInfo memberInfo;
 
-    @OneToMany(mappedBy = "memberId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Mark> markList = new ArrayList<>();
 
@@ -69,7 +69,7 @@ public class Member {
 
     public void addMemberInfo(MemberInfo memberInfo) {
         this.memberInfo = memberInfo;
-        memberInfo.setMemberId(this);
+        memberInfo.setMember(this);
     }
 
     public void updateAccountStatus() {

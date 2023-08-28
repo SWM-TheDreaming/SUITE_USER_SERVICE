@@ -65,6 +65,8 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-sns:1.12.46' // AWS SDK 의존성 추가
     implementation 'software.amazon.awssdk:sns:2.17.96'
 
+    implementation 'org.springframework.kafka:spring-kafka:2.8.5'
+
 
 }
 

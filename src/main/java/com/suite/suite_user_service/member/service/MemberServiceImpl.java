@@ -4,8 +4,6 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.sns.AmazonSNS;
-import com.amazonaws.services.sns.model.PublishResult;
 import com.suite.suite_user_service.member.auth.KakaoAuth;
 import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.entity.Member;
@@ -87,7 +85,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto, MultipartFile file) {
-        memberInfoRepository.findByMemberId_Email(reqSignUpMemberDto.getEmail()).ifPresent(
+        memberInfoRepository.findByMember_Email(reqSignUpMemberDto.getEmail()).ifPresent(
                 memberInfo -> { throw new CustomException(StatusCode.REGISTERED_EMAIL); });
 
         Member member = reqSignUpMemberDto.toMemberEntity();
@@ -108,8 +106,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto, MultipartFile file) {
-        MemberInfo memberInfo = memberInfoRepository.findByMemberId_Email(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
-        memberInfo.setProfileImage(saveProfileImage(memberInfo.getMemberId().getMemberId(), file));
+        MemberInfo memberInfo = memberInfoRepository.findByMember_Email(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
+        memberInfo.setProfileImage(saveProfileImage(memberInfo.getMember().getMemberId(), file));
         memberInfo.updateProfile(reqUpdateMemberDto);
     }
 

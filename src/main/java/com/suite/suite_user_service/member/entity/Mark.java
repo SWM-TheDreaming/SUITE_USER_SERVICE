@@ -21,16 +21,16 @@ public class Mark {
     @ManyToOne
     @JoinColumn(name = "member_id")
     @JsonBackReference
-    private Member memberId;
+    private Member member;
 
     @Column(name = "suite_room_id")
     private Long suiteRoomId;
 
 
     @Builder
-    public Mark(Long markId, Member memberId, Long suiteRoomId) {
+    public Mark(Long markId, Member member, Long suiteRoomId) {
         this.markId = markId;
-        this.memberId = memberId;
+        this.member = member;
         this.suiteRoomId = suiteRoomId;
     }
 }
