@@ -76,4 +76,8 @@ public class Member {
         this.accountStatus = String.valueOf(AccountStatus.DISABLED);
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
 }

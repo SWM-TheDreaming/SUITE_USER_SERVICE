@@ -140,18 +140,30 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String sendSms(String phoneNumber) {
-        System.out.println("number = " + phoneNumber);
         String authCode = generateRandomNumber();
 
-        PublishRequest request = PublishRequest.builder()
+        PublishRequest.builder()
                 .phoneNumber(phoneNumber)
                 .message("[SUITE] 본인 확인을 위해 인증번호 [" + authCode + "]를 입력해주세요.")
                 .build();
-        PublishResponse result = snsClient.publish(request);
-
-        System.out.println(result.messageId() + " Message sent. Status was " + result.sdkHttpResponse().statusCode());
 
         return authCode;
+    }
+
+    @Override
+    public Map<String, Object> lookupEmailByPhoneNumber(String phoneNumber) {
+        return Map.of("email",
+                makeHiddenEmail(memberInfoRepository.findByPhone(phoneNumber)
+                        .orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND))
+                        .getMember().getEmail()));
+    }
+
+    @Override
+    @Transactional
+    public void lookupPassordByPhoneNumber(String email, String newPassword) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
+        member.updatePassword(newPassword);
     }
 
     private Token verifyOauthAccount(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder) {
@@ -168,6 +180,16 @@ public class MemberServiceImpl implements MemberService {
                         .refreshToken(token.getRefreshToken())
                         .userAgent(userAgent).build());
         return token;
+    }
+
+    private String makeHiddenEmail(String email) {
+        String[] emailPart  = email.split("@");
+
+        StringBuilder maskedStringBuilder = new StringBuilder(emailPart[0]);
+        for(int i = 0; i <= emailPart[0].length() / 2; i++) maskedStringBuilder.setCharAt(i, '*');
+        maskedStringBuilder.append("@");
+        maskedStringBuilder.append(emailPart[1]);
+        return maskedStringBuilder.toString();
     }
 
     private String saveProfileImage(Long memberId, MultipartFile multiPartFile) {

@@ -28,6 +28,7 @@ public class MemberInfo {
 
     private String nickname;
 
+    @Column(name = "phone", unique = true)
     private String phone;
 
     @Column(name = "security_num")
@@ -81,4 +82,5 @@ public class MemberInfo {
         this.preferStudy = reqUpdateMemberDto.getPreferStudy();
         this.studyMethod = reqUpdateMemberDto.getStudyMethod();
     }
+
 }

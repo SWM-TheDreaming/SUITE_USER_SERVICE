@@ -5,7 +5,6 @@ import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface MemberService {
@@ -25,4 +24,7 @@ public interface MemberService {
 
     String sendSms(String phoneNumber);
 
+    Map<String, Object> lookupEmailByPhoneNumber(String phoneNumber);
+
+    void lookupPassordByPhoneNumber(String email, String newPassword);
 }

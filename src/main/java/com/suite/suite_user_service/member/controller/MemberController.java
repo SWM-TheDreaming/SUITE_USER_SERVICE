@@ -6,8 +6,6 @@ import com.suite.suite_user_service.member.handler.StatusCode;
 import com.suite.suite_user_service.member.service.EmailService;
 import com.suite.suite_user_service.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
@@ -72,13 +70,15 @@ public class MemberController {
     }
 
     @PostMapping("/id")
-    public ResponseEntity<Message> findSuiteId() {
-        return null;
+    public ResponseEntity<Message> findSuiteId(@RequestBody Map<String, String> inputPhoneByMember) {
+        return ResponseEntity.ok(new Message(StatusCode.OK, memberService.lookupEmailByPhoneNumber(inputPhoneByMember.get("phoneNumber"))));
     }
 
-    @PostMapping("/pw")
-    public ResponseEntity<Message> findSuitePw() {
-        return null;
+    @PatchMapping("/pw")
+    public ResponseEntity<Message> findSuitePw(@RequestBody ReqLookupPasswordDto reqLookupPasswordDto) {
+        reqLookupPasswordDto.encodePassword(passwordEncoder);
+        memberService.lookupPassordByPhoneNumber(reqLookupPasswordDto.getEmail(), reqLookupPasswordDto.getNewPassword());
+        return ResponseEntity.ok(new Message(StatusCode.OK));
     }
 
     @GetMapping("/m/profile")
