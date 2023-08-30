@@ -31,6 +31,7 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.time.Instant;
 import java.util.*;
 
 
@@ -215,8 +216,7 @@ public class MemberServiceImpl implements MemberService {
 
     private String generateJSONData(Object data) {
         JSONObject obj = new JSONObject();
-        obj.put("uuid", "UserRegistrationProducer");
-        obj.put("count", 0);
+        obj.put("uuid", "UserRegistrationProducer/" + Instant.now().toEpochMilli());
         obj.put("data", data);
         return obj.toJSONString();
     }
