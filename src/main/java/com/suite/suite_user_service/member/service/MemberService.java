@@ -6,13 +6,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 public interface MemberService {
 
     Token getSuiteToken(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder);
 
     Message getOauthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder);
-    void saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto, MultipartFile file);
+    Map<String, Object> saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto);
+    void uploadImageS3(Long memberId, MultipartFile file);
     ResMemberInfoDto getMemberInfo(AuthorizerDto authorizerDto);
 
     void updateMemberInfo(AuthorizerDto authorizerDto, ReqUpdateMemberDto reqUpdateMemberDto, MultipartFile file);

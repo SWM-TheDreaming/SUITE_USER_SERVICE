@@ -86,7 +86,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto, MultipartFile file) {
+    public Map<String, Object> saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto) {
         memberInfoRepository.findByMember_Email(reqSignUpMemberDto.getEmail()).ifPresent(
                 memberInfo -> { throw new CustomException(StatusCode.REGISTERED_EMAIL); });
 
@@ -94,13 +94,21 @@ public class MemberServiceImpl implements MemberService {
         MemberInfo memberInfo = reqSignUpMemberDto.toMemberInfoEntity();
         member.addMemberInfo(memberInfo);
         memberRepository.save(member);
-        memberInfo.setProfileImage(saveProfileImage(member.getMemberId(), file));
         memberInfoRepository.save(memberInfo);
 
         Map<String, Object> map = new HashMap<>();
         map.put("memberId", member.getMemberId());
         map.put("fcm", "fcmValue");
         suiteUserProducer.sendUserRegistrationFCMMessage(generateJSONData(map));
+        return map;
+    }
+
+    @Override
+    @Transactional
+    public void uploadImageS3(Long memberId, MultipartFile file) {
+        MemberInfo memberInfo = memberInfoRepository.findByMember_MemberId(memberId).orElseThrow(() -> new CustomException(StatusCode.FORBIDDEN));
+        memberInfo.setProfileImage(saveProfileImage(memberId, file));
+        memberInfoRepository.save(memberInfo);
     }
 
     @Override

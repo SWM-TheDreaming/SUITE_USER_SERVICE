@@ -31,11 +31,16 @@ public class MemberController {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping(value = "/signup", consumes = {"multipart/form-data"})
-    public ResponseEntity<Message> signupSuite(@Valid @RequestPart ReqSignUpMemberDto reqSignUpMemberDto, BindingResult bindingResult, @RequestPart(required = false) MultipartFile file) {
+    @PostMapping(value = "/signup")
+    public ResponseEntity<Message> signupSuite(@Valid @RequestBody ReqSignUpMemberDto reqSignUpMemberDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
         reqSignUpMemberDto.encodePassword(passwordEncoder);
-        memberService.saveMemberInfo(reqSignUpMemberDto, file);
+        return ResponseEntity.ok(new Message(StatusCode.OK, memberService.saveMemberInfo(reqSignUpMemberDto)));
+    }
+
+    @PostMapping(value = "/profile-image/{memberId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<Message> uploadProfileImage(@PathVariable Long memberId, @RequestPart(required = false) MultipartFile file) {
+        memberService.uploadImageS3(memberId, file);
         return ResponseEntity.ok(new Message(StatusCode.OK));
     }
 
