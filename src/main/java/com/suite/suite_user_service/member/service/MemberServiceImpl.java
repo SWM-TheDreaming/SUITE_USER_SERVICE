@@ -108,7 +108,6 @@ public class MemberServiceImpl implements MemberService {
     public void uploadImageS3(Long memberId, MultipartFile file) {
         MemberInfo memberInfo = memberInfoRepository.findByMember_MemberId(memberId).orElseThrow(() -> new CustomException(StatusCode.FORBIDDEN));
         memberInfo.setProfileImage(saveProfileImage(memberId, file));
-        memberInfoRepository.save(memberInfo);
     }
 
     @Override
@@ -198,7 +197,7 @@ public class MemberServiceImpl implements MemberService {
             String fileName = parseUUID(memberId, Objects.requireNonNull(multiPartFile.getOriginalFilename()));
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(multiPartFile.getSize());
-            metadata.setContentType("image/png");
+            metadata.setContentType("image/*");
             metadata.setContentDisposition("inline");
             amazonS3.putObject(bucket, fileName, multiPartFile.getInputStream(), metadata);
             return fileName;
