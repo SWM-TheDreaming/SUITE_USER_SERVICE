@@ -52,6 +52,10 @@ public class MemberServiceImpl implements MemberService {
     private final SuiteUserProducer suiteUserProducer;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Value("${topic.USER_REGISTRATION_FCM}")
+    private String USER_REGISTRATION_FCM;
+    @Value("${topic.USER_REGISTRATION_USERMETAINFO}")
+    private String USER_REGISTRATION_USERMETAINFO;
 
 
     @Override
@@ -99,7 +103,7 @@ public class MemberServiceImpl implements MemberService {
         Map<String, Object> map = new HashMap<>();
         map.put("memberId", member.getMemberId());
         map.put("fcm", "fcmValue");
-        suiteUserProducer.sendUserRegistrationFCMMessage(generateJSONData(map));
+        suiteUserProducer.sendMessage(USER_REGISTRATION_FCM, map);
         return map;
     }
 
@@ -243,10 +247,4 @@ public class MemberServiceImpl implements MemberService {
         return stringBuilder.toString();
     }
 
-    private String generateJSONData(Object data) {
-        JSONObject obj = new JSONObject();
-        obj.put("uuid", "UserRegistrationProducer/" + Instant.now().toEpochMilli());
-        obj.put("data", data);
-        return obj.toJSONString();
-    }
 }
