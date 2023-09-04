@@ -64,7 +64,8 @@ public class Member {
                 .studyMethod(memberInfo.getStudyMethod())
                 .accountStatus(accountStatus)
                 .profileURL(fileURL)
-                .isOauth(isOauth).build();
+                .isOauth(isOauth)
+                .accountNumber(memberInfo.getAccountNumber()).build();
     }
 
     public void addMemberInfo(MemberInfo memberInfo) {
