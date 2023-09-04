@@ -45,8 +45,11 @@ public class MemberInfo {
     //프로필 이미지
     private String profileImage;
 
+    @Column(name = "account_number")
+    private String accountNumber;
+
     @Builder
-    public MemberInfo(Long memberInfoId, Member member, String name, String nickname, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String profileImage) {
+    public MemberInfo(Long memberInfoId, Member member, String name, String nickname, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String profileImage, String accountNumber) {
         this.memberInfoId = memberInfoId;
         this.member = member;
         this.name = name;
@@ -56,6 +59,7 @@ public class MemberInfo {
         this.preferStudy = preferStudy;
         this.studyMethod = studyMethod;
         this.profileImage = profileImage;
+        this.accountNumber = accountNumber;
     }
 
     public ReqSignUpMemberDto entityToDto() {
