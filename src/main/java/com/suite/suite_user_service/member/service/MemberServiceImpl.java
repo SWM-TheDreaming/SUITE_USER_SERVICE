@@ -144,11 +144,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String sendSms(String phoneNumber) {
         String authCode = generateRandomNumber();
+        try {
+            snsClient.publish(PublishRequest.builder()
+                    .phoneNumber(phoneNumber)
+                    .message("[SUITE] 본인 확인을 위해 인증번호 [" + authCode + "]를 입력해주세요.")
+                    .build());
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        snsClient.publish(PublishRequest.builder()
-                .phoneNumber(phoneNumber)
-                .message("[SUITE] 본인 확인을 위해 인증번호 [" + authCode + "]를 입력해주세요.")
-                .build());
         return authCode;
     }
 
