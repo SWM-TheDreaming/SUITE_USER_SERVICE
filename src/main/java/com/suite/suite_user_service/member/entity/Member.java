@@ -1,6 +1,7 @@
 package com.suite.suite_user_service.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.suite.suite_user_service.baseTime.BaseTimeEntity;
 import com.suite.suite_user_service.member.dto.AccountStatus;
 import com.suite.suite_user_service.member.dto.ResMemberInfoDto;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(name = "member")
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +40,6 @@ public class Member {
     @OneToOne(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private MemberInfo memberInfo;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Mark> markList = new ArrayList<>();
 
     @Builder
     public Member(String email, String password, String role, String accountStatus, boolean isOauth) {

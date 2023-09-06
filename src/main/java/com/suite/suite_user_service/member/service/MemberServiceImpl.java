@@ -145,11 +145,10 @@ public class MemberServiceImpl implements MemberService {
     public String sendSms(String phoneNumber) {
         String authCode = generateRandomNumber();
 
-        PublishRequest.builder()
+        snsClient.publish(PublishRequest.builder()
                 .phoneNumber(phoneNumber)
                 .message("[SUITE] 본인 확인을 위해 인증번호 [" + authCode + "]를 입력해주세요.")
-                .build();
-
+                .build());
         return authCode;
     }
 

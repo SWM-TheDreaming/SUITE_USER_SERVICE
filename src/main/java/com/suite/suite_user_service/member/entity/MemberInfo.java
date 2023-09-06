@@ -1,5 +1,6 @@
 package com.suite.suite_user_service.member.entity;
 
+import com.suite.suite_user_service.baseTime.BaseTimeEntity;
 import com.suite.suite_user_service.member.dto.ReqSignUpMemberDto;
 import com.suite.suite_user_service.member.dto.ReqUpdateMemberDto;
 import com.suite.suite_user_service.member.dto.StudyCategory;
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Table(name = "member_info")
-public class MemberInfo {
+public class MemberInfo extends BaseTimeEntity {
 
     @Id
     @Column(name = "member_info_id")
