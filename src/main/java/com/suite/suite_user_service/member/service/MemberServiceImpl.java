@@ -102,7 +102,7 @@ public class MemberServiceImpl implements MemberService {
 
         Map<String, Object> map = new HashMap<>();
         map.put("memberId", member.getMemberId());
-        map.put("fcm", "fcmValue");
+        map.put("fcm", reqSignUpMemberDto.getFcmToken());
         suiteUserProducer.sendMessage(USER_REGISTRATION_FCM, map);
         return map;
     }

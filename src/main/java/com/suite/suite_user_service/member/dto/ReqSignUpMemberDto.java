@@ -40,6 +40,7 @@ public class ReqSignUpMemberDto {
 
     private StudyType studyMethod;
     private boolean isOauth;
+    private String fcmToken;
     private String profileImage;
 
     @Builder
