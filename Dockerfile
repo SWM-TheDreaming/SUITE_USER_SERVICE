@@ -1,5 +1,9 @@
 FROM openjdk:11
-ARG JAR_FILE=./build/libs/*.jar
-VOLUME /allso_Img
-COPY ${JAR_FILE} suite-user.jar
-ENTRYPOINT ["java","-jar","/suite-user.jar"]
+
+ARG JAR_FILE=./build/libs/kafka-0.0.1-SNAPSHOT.jar
+
+COPY ${JAR_FILE} suite-user-service-app.jar
+
+EXPOSE 9001
+
+ENTRYPOINT ["java","-jar","suite-user-service-app.jar"]
