@@ -1,4 +1,4 @@
-name: Docker Image Suite-User CI
+name: Docker Image SUITE_USER_SERVICE CI
 
 on:
   push:
@@ -12,37 +12,64 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: production application file setting
+        run: |
+          mkdir -p ./src/main/resources
+          touch ./src/main/resources/application.yml
+      - uses: actions/upload-artifact@v2
+        with:
+          name: application.yml
+          path: ./src/main/resources/application.yml
+        
       - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Init with Gradle
+        uses: gradle/gradle-build-action@v2
+      - run: gradle init
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         
-      - name: Build with Gradle
-        run: ./gradlew clean build -x test
 
-      - name: Get current time
-        uses: 1466587594/get-current-time@v2
-        id: current-time
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          format: YYYY-MM-DDTHH-mm-ss
-          utcOffset: "+09:00"
+          gradle-version: 7.1.1
+          arguments: build -x test
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+          aws-region: ap-northeast-2 ## 자신의 리전
+
+      - name: Check if image with tag exists
+        id: check-image
+        run: |
+          if aws ecr describe-images --repository-name suite-ecr --image-ids imageTag=suite-user-service-latest; then
+            echo "Image with tag $IMAGE_TAG exists in repository $REPOSITORY"
+            echo "::set-output name=image_exists::true"
+          else
+            echo "Image with tag $IMAGE_TAG does not exist in repository $REPOSITORY"
+            echo "::set-output name=image_exists::false"
+          fi
+
+      - name: Delete existing image with the same tag
+        if: steps.check-image.outputs.image_exists == 'true'
+        run: |
+          aws ecr batch-delete-image --repository suite-ecr --image-ids imageTag=suite-user-service-latest
+      
 
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v1
-
+ 
       - name: Build & Push to ECR
         run: |
-          docker build -t suite-user:${{steps.current-time.outputs.formattedTime}} .
-          docker tag suite-user:${{steps.current-time.outputs.formattedTime}} 386659376683.dkr.ecr.us-east-2.amazonaws.com/suite-user:${{steps.current-time.outputs.formattedTime}}
-          docker push 386659376683.dkr.ecr.us-east-2.amazonaws.com/suite-user:${{steps.current-time.outputs.formattedTime}}
+          docker build -t suite-ecr:suite-user-service-latest .
+          docker tag suite-ecr:suite-user-service-latest ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/suite-ecr:suite-user-service-latest
+          docker push ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/suite-ecr:suite-user-service-latest
