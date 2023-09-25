@@ -18,7 +18,6 @@ import com.suite.suite_user_service.member.repository.RefreshTokenRepository;
 import com.suite.suite_user_service.member.security.JwtCreator;
 import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,6 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.time.Instant;
 import java.util.*;
 
 
@@ -103,7 +101,9 @@ public class MemberServiceImpl implements MemberService {
         Map<String, Object> map = new HashMap<>();
         map.put("memberId", member.getMemberId());
         map.put("fcm", reqSignUpMemberDto.getFcmToken());
-        suiteUserProducer.sendMessage(USER_REGISTRATION_FCM, map);
+        map.put("accountStatus", member.getAccountStatus());
+        suiteUserProducer.userRegistrationFCMProducer(USER_REGISTRATION_FCM, map);
+        suiteUserProducer.userRegistrationMetaInfoProducer(USER_REGISTRATION_USERMETAINFO, map);
         return map;
     }
 
