@@ -50,10 +50,7 @@ public class MemberServiceImpl implements MemberService {
     private final SuiteUserProducer suiteUserProducer;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    @Value("${topic.USER_REGISTRATION_FCM}")
-    private String USER_REGISTRATION_FCM;
-    @Value("${topic.USER_REGISTRATION_USERMETAINFO}")
-    private String USER_REGISTRATION_USERMETAINFO;
+
 
 
     @Override
@@ -92,19 +89,19 @@ public class MemberServiceImpl implements MemberService {
         memberInfoRepository.findByMember_Email(reqSignUpMemberDto.getEmail()).ifPresent(
                 memberInfo -> { throw new CustomException(StatusCode.REGISTERED_EMAIL); });
 
+        memberInfoRepository.findByPhone(reqSignUpMemberDto.getPhone()).ifPresent(
+                memberInfo -> { throw new CustomException(StatusCode.REGISTERED_EMAIL); });
+
         Member member = reqSignUpMemberDto.toMemberEntity();
         MemberInfo memberInfo = reqSignUpMemberDto.toMemberInfoEntity();
         member.addMemberInfo(memberInfo);
         memberRepository.save(member);
         memberInfoRepository.save(memberInfo);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("memberId", member.getMemberId());
-        map.put("fcm", reqSignUpMemberDto.getFcmToken());
-        map.put("accountStatus", member.getAccountStatus());
-        suiteUserProducer.userRegistrationFCMProducer(USER_REGISTRATION_FCM, map);
-        suiteUserProducer.userRegistrationMetaInfoProducer(USER_REGISTRATION_USERMETAINFO, map);
-        return map;
+        Map<String, Object> metaData = suiteUserProducer.createMemberMeta(member.getMemberId(), reqSignUpMemberDto.getFcmToken(), member.getAccountStatus());
+        suiteUserProducer.userRegistrationFCMProducer(metaData);
+        suiteUserProducer.userRegistrationMetaInfoProducer(metaData);
+        return metaData;
     }
 
     @Override
