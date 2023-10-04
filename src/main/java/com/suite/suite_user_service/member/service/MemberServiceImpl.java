@@ -154,7 +154,7 @@ public class MemberServiceImpl implements MemberService {
             System.err.println(e.awsErrorDetails().errorMessage());
             System.exit(1);
         }
-
+        System.out.flush();
         return authCode;
     }
 
