@@ -141,6 +141,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String sendSms(String phoneNumber) {
+        System.out.println("phone : " + phoneNumber);
         String authCode = generateRandomNumber();
         try {
             System.out.println("phone : " + phoneNumber);
