@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -34,6 +35,7 @@ public class AWSConfig {
     }
 
     @Bean
+    @Lazy
     public AmazonS3 amazonS3() {
         BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 
@@ -45,6 +47,7 @@ public class AWSConfig {
     }
 
     @Bean
+    @Lazy
     public SnsClient snsClient() {
         return SnsClient.builder()
                 .region(Region.US_EAST_2)
