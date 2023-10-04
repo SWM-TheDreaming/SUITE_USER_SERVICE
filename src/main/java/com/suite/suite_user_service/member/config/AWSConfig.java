@@ -2,7 +2,6 @@ package com.suite.suite_user_service.member.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -15,15 +14,13 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
 
-@Configuration
+//@Configuration
 public class AWSConfig {
 
-    @Value("${cloud.aws.credentials.access-key}")
+    /*@Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
     @Value("${cloud.aws.credentials.secret-key}")
     private String secretKey;
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
     @Bean
     public AmazonS3 amazonS3() {
         BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
@@ -43,5 +40,5 @@ public class AWSConfig {
                 .region(Region.US_EAST_2)
                 .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
                 .build();
-    }
+    }*/
 }
