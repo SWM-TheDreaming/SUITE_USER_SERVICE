@@ -141,10 +141,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String sendSms(String phoneNumber) {
-        System.out.println("phone : " + phoneNumber);
         String authCode = generateRandomNumber();
         try {
-            System.out.println("phone : " + phoneNumber);
             PublishResponse response = snsClient.publish(PublishRequest.builder()
                     .phoneNumber(phoneNumber)
                     .message("[SUITE] 본인 확인을 위해 인증번호 [" + authCode + "]를 입력해주세요.")
@@ -155,7 +153,6 @@ public class MemberServiceImpl implements MemberService {
             System.err.println(e.awsErrorDetails().errorMessage());
             System.exit(1);
         }
-        System.out.flush();
         return authCode;
     }
 
