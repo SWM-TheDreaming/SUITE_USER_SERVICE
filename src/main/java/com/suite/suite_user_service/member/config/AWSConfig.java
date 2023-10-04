@@ -1,8 +1,10 @@
 package com.suite.suite_user_service.member.config;
 
+import antlr.StringUtils;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -24,16 +26,25 @@ public class AWSConfig {
     private String accessKey;
     @Value("${cloud.aws.credentials.secret-key}")
     private String secretKey;
-
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
     @Bean
     public AmazonS3 amazonS3() {
         BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-
-        return  (AmazonS3Client) AmazonS3ClientBuilder
-                .standard()
-                .withRegion(Regions.AP_NORTHEAST_2)
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .build();
+        if(activeProfile.equals("prod")) {
+            System.out.println("@@ prod");
+            return  (AmazonS3Client) AmazonS3ClientBuilder
+                    .standard()
+                    .withRegion(Regions.AP_NORTHEAST_2)
+                    .withCredentials(InstanceProfileCredentialsProvider.getInstance())
+                    .build();
+        }else {
+            return (AmazonS3Client) AmazonS3ClientBuilder
+                    .standard()
+                    .withRegion(Regions.AP_NORTHEAST_2)
+                    .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                    .build();
+        }
     }
 
     @Bean
