@@ -107,4 +107,6 @@ public class MemberController {
         return ResponseEntity.ok(new Message(StatusCode.OK, authCode));
     }
 
+
+
 }
