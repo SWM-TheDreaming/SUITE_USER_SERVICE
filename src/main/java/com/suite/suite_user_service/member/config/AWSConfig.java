@@ -14,10 +14,10 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
 
-//@Configuration
+@Configuration
 public class AWSConfig {
 
-    /*@Value("${cloud.aws.credentials.access-key}")
+    @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
     @Value("${cloud.aws.credentials.secret-key}")
     private String secretKey;
@@ -30,7 +30,6 @@ public class AWSConfig {
                 .withRegion(Regions.AP_NORTHEAST_2)
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
                 .build();
-
     }
 
     @Bean
@@ -40,5 +39,5 @@ public class AWSConfig {
                 .region(Region.US_EAST_2)
                 .credentialsProvider(StaticCredentialsProvider.create(awsBasicCredentials))
                 .build();
-    }*/
+    }
 }
