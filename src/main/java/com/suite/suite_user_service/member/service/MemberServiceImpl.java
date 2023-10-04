@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
+import software.amazon.awssdk.services.sns.model.SnsException;
 
 import java.io.File;
 import java.io.IOException;
@@ -149,8 +150,9 @@ public class MemberServiceImpl implements MemberService {
                     .build());
 
             System.out.println("Message ID: " + response.toString());
-        }catch (Exception e) {
-            e.printStackTrace();
+        } catch (SnsException e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+            System.exit(1);
         }
 
         return authCode;
