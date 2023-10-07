@@ -19,9 +19,13 @@ public class ResMemberInfoDto {
     private boolean isOauth;
     private String profileURL;
     private String accountNumber;
+    private int attendanceCompleteCount;
+    private int missionCompleteCount;
+    private Double attendanceAvgRate;
+    private Double missionAvgRate;
 
     @Builder
-    public ResMemberInfoDto(Long memberId, String email, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String accountStatus, boolean isOauth, String profileURL, String accountNumber) {
+    public ResMemberInfoDto(Long memberId, String email, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String accountStatus, boolean isOauth, String profileURL, String accountNumber, ResDashBoardAvgDto resDashBoardAvgDto) {
         this.memberId = memberId;
         this.email = email;
         this.name = name;
@@ -34,5 +38,9 @@ public class ResMemberInfoDto {
         this.isOauth = isOauth;
         this.profileURL = profileURL;
         this.accountNumber = accountNumber;
+        this.attendanceCompleteCount = resDashBoardAvgDto.getAttendanceCompleteCount();
+        this.missionCompleteCount = resDashBoardAvgDto.getMissionCompleteCount();
+        this.attendanceAvgRate = resDashBoardAvgDto.getAttendanceAvgRate();
+        this.missionAvgRate = resDashBoardAvgDto.getMissionAvgRate();
     }
 }

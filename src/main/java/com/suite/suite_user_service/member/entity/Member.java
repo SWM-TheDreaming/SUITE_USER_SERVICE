@@ -3,6 +3,7 @@ package com.suite.suite_user_service.member.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.suite.suite_user_service.baseTime.BaseTimeEntity;
 import com.suite.suite_user_service.member.dto.AccountStatus;
+import com.suite.suite_user_service.member.dto.ResDashBoardAvgDto;
 import com.suite.suite_user_service.member.dto.ResMemberInfoDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,7 +51,7 @@ public class Member extends BaseTimeEntity {
         this.isOauth = isOauth;
     }
 
-    public ResMemberInfoDto toResMemberInfoDto(String fileURL) {
+    public ResMemberInfoDto toResMemberInfoDto(String fileURL, ResDashBoardAvgDto resDashBoardAvgDto) {
         return ResMemberInfoDto.builder()
                 .memberId(memberId)
                 .email(email)
@@ -63,7 +64,8 @@ public class Member extends BaseTimeEntity {
                 .accountStatus(accountStatus)
                 .profileURL(fileURL)
                 .isOauth(isOauth)
-                .accountNumber(memberInfo.getAccountNumber()).build();
+                .accountNumber(memberInfo.getAccountNumber())
+                .resDashBoardAvgDto(resDashBoardAvgDto).build();
     }
 
     public void addMemberInfo(MemberInfo memberInfo) {

@@ -49,6 +49,7 @@ public class MemberServiceImpl implements MemberService {
     private final AmazonS3 amazonS3;
     private final SnsClient snsClient;
     private final SuiteUserProducer suiteUserProducer;
+    private final SuiteStudyService suiteStudyService;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -115,8 +116,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ResMemberInfoDto getMemberInfo(AuthorizerDto authorizerDto) {
         Member member = memberRepository.findByEmail(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
-
-        return member.toResMemberInfoDto(getFileURL(member.getMemberInfo().getProfileImage()));
+        ResDashBoardAvgDto resDashBoardAvgDto = suiteStudyService.getStudyAvgInfo(authorizerDto.getMemberId());
+        return member.toResMemberInfoDto(getFileURL(member.getMemberInfo().getProfileImage()), resDashBoardAvgDto);
     }
 
     @Override
