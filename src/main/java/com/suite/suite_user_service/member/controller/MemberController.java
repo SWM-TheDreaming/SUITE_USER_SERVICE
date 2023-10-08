@@ -102,8 +102,7 @@ public class MemberController {
 
     @PostMapping("/send-sms")
     public ResponseEntity<Message> sendSmsWithAuthCode(@RequestBody Map<String, String> phone) {
-        String koreanPhoneNumber = "+82" + phone.get("phoneNumber").replaceAll("-", "");
-        String authCode = memberService.sendSms(koreanPhoneNumber);
+        String authCode = memberService.sendSms(phone.get("phoneNumber"));
         return ResponseEntity.ok(new Message(StatusCode.OK, authCode));
     }
 

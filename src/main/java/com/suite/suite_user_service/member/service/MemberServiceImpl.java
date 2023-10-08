@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.suite.suite_user_service.member.auth.GoogleAuth;
-import com.suite.suite_user_service.member.auth.KakaoAuth;
 import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.entity.Member;
 import com.suite.suite_user_service.member.entity.MemberInfo;
@@ -26,13 +25,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
-import software.amazon.awssdk.services.sns.model.PublishResponse;
 import software.amazon.awssdk.services.sns.model.SnsException;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -46,7 +47,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberInfoRepository memberInfoRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtCreator jwtCreator;
-    private final KakaoAuth kakaoAuth;
     private final GoogleAuth googleAuth;
     private final AmazonS3 amazonS3;
     private final SnsClient snsClient;
@@ -92,9 +92,6 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Map<String, Object> saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto) {
         memberInfoRepository.findByMember_Email(reqSignUpMemberDto.getEmail()).ifPresent(
-                memberInfo -> { throw new CustomException(StatusCode.REGISTERED_EMAIL); });
-
-        memberInfoRepository.findByPhone(reqSignUpMemberDto.getPhone()).ifPresent(
                 memberInfo -> { throw new CustomException(StatusCode.REGISTERED_EMAIL); });
 
         Member member = reqSignUpMemberDto.toMemberEntity();
@@ -150,13 +147,18 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String sendSms(String phoneNumber) {
         String authCode = generateRandomNumber();
+
+        memberInfoRepository.findByPhone(phoneNumber).ifPresent(
+                memberInfo -> { throw new CustomException(StatusCode.REGISTERED_EMAIL); });
+
+        String koreanPhoneNumber = "+82" + phoneNumber.replaceAll("-", "");
+
         try {
-            PublishResponse response = snsClient.publish(PublishRequest.builder()
-                    .phoneNumber(phoneNumber)
+            snsClient.publish(PublishRequest.builder()
+                    .phoneNumber(koreanPhoneNumber)
                     .message("[SUITE] 본인 확인을 위해 인증번호 [" + authCode + "]를 입력해주세요.")
                     .build());
 
-            System.out.println("Message ID: " + response.toString());
         } catch (SnsException e) {
             System.err.println(e.awsErrorDetails().errorMessage());
             System.exit(1);
