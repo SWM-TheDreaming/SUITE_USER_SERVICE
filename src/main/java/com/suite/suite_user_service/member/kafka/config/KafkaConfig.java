@@ -1,5 +1,6 @@
 package com.suite.suite_user_service.member.kafka.config;
 
+import com.suite.suite_user_service.member.service.AnpService;
 import com.suite.suite_user_service.member.service.SuiteStudyService;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -61,5 +62,11 @@ public class KafkaConfig {
     public SuiteStudyService suiteStudyService(RestTemplate restTemplate) {
         String GET_STUDYAVGINFO_URI = "http://semtle.catholic.ac.kr:8087/study-info/";
         return new SuiteStudyService(GET_STUDYAVGINFO_URI, restTemplate);
+    }
+
+    @Bean
+    public AnpService anpService(RestTemplate restTemplate) {
+        String GET_POINT_URI = "http://semtle.catholic.ac.kr:8088/anp/point/";
+        return new AnpService(GET_POINT_URI, restTemplate);
     }
 }

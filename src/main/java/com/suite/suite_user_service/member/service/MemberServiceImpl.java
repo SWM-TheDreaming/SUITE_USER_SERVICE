@@ -52,6 +52,7 @@ public class MemberServiceImpl implements MemberService {
     private final SnsClient snsClient;
     private final SuiteUserProducer suiteUserProducer;
     private final SuiteStudyService suiteStudyService;
+    private final AnpService anpService;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -122,7 +123,7 @@ public class MemberServiceImpl implements MemberService {
 
         ResMemberInfoDto resMemberInfoDto = member.toResMemberInfoDto(resDashBoardAvgDto);
         resMemberInfoDto.setProfileURL(member.getMemberInfo().getProfileImage() != null ? getFileURL(member.getMemberInfo().getProfileImage()) : "");
-
+        resMemberInfoDto.setPoint(anpService.getPoint(authorizerDto.getMemberId()));
         return resMemberInfoDto;
     }
 

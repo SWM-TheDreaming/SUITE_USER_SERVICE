@@ -23,9 +23,10 @@ public class ResMemberInfoDto {
     private int missionCompleteCount;
     private Double attendanceAvgRate;
     private Double missionAvgRate;
+    private Integer point;
 
     @Builder
-    public ResMemberInfoDto(Long memberId, String email, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String accountStatus, boolean isOauth, String profileURL, String accountNumber, ResDashBoardAvgDto resDashBoardAvgDto) {
+    public ResMemberInfoDto(Long memberId, String email, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String accountStatus, boolean isOauth, String profileURL, String accountNumber, ResDashBoardAvgDto resDashBoardAvgDto, Integer point) {
         this.memberId = memberId;
         this.email = email;
         this.name = name;
@@ -42,9 +43,14 @@ public class ResMemberInfoDto {
         this.missionCompleteCount = resDashBoardAvgDto.getMissionCompleteCount();
         this.attendanceAvgRate = resDashBoardAvgDto.getAttendanceAvgRate();
         this.missionAvgRate = resDashBoardAvgDto.getMissionAvgRate();
+        this.point = point;
     }
 
     public void setProfileURL(String profileURL) {
         this.profileURL = profileURL;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
 }
