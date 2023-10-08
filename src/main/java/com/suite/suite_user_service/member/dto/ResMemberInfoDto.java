@@ -43,4 +43,8 @@ public class ResMemberInfoDto {
         this.attendanceAvgRate = resDashBoardAvgDto.getAttendanceAvgRate();
         this.missionAvgRate = resDashBoardAvgDto.getMissionAvgRate();
     }
+
+    public void setProfileURL(String profileURL) {
+        this.profileURL = profileURL;
+    }
 }

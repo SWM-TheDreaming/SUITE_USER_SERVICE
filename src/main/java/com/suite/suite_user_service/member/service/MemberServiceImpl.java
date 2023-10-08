@@ -119,7 +119,11 @@ public class MemberServiceImpl implements MemberService {
     public ResMemberInfoDto getMemberInfo(AuthorizerDto authorizerDto) {
         Member member = memberRepository.findByEmail(authorizerDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.NOT_FOUND));
         ResDashBoardAvgDto resDashBoardAvgDto = suiteStudyService.getStudyAvgInfo(authorizerDto.getMemberId());
-        return member.toResMemberInfoDto(getFileURL(member.getMemberInfo().getProfileImage()), resDashBoardAvgDto);
+
+        ResMemberInfoDto resMemberInfoDto = member.toResMemberInfoDto(resDashBoardAvgDto);
+        resMemberInfoDto.setProfileURL(member.getMemberInfo().getProfileImage() != null ? getFileURL(member.getMemberInfo().getProfileImage()) : "");
+
+        return resMemberInfoDto;
     }
 
     @Override
@@ -218,6 +222,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private String getFileURL(String fileName) {
+        if(fileName.equals("")) return null;
         Date expiration = new Date();
         long expTomeMillis = expiration.getTime();
         expTomeMillis += 1000 * 60 * 60; //1hour

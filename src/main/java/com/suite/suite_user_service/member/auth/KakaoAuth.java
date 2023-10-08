@@ -1,24 +1,10 @@
 package com.suite.suite_user_service.member.auth;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.suite.suite_user_service.member.dto.ReqSignInMemberDto;
-import com.suite.suite_user_service.member.handler.CustomException;
-import com.suite.suite_user_service.member.handler.StatusCode;
 import org.springframework.stereotype.Component;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
 
 @Component
 public class KakaoAuth {
-    public static final String USERINFO_URL = "https://kapi.kakao.com/v2/user/me";
+    /*public static final String USERINFO_URL = "https://kapi.kakao.com/v2/user/me";
     public ReqSignInMemberDto getKakaoMemberInfo(String accessToken) {
         HashMap<String, Object> userInfo = new HashMap<>();
         try {
@@ -51,5 +37,5 @@ public class KakaoAuth {
         } catch (IOException e) {
             throw new CustomException(StatusCode.FAILED_REQUEST);
         }
-    }
+    }*/
 }

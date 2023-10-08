@@ -42,8 +42,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.7.8'
     //json
-    implementation 'com.google.code.gson:gson:2.7'
-    implementation 'commons-io:commons-io:2.6'
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
     //sql
     runtimeOnly 'mysql:mysql-connector-java:8.0.25'
@@ -53,6 +51,7 @@ dependencies {
     //actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.5.0'
+
     //spring email
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.6.3'
 
@@ -66,6 +65,8 @@ dependencies {
     implementation 'software.amazon.awssdk:sns:2.17.96'
 
     implementation 'org.springframework.kafka:spring-kafka:2.8.5'
+
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 
 }
 
