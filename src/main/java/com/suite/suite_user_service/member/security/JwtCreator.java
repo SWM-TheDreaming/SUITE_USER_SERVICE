@@ -4,10 +4,13 @@ package com.suite.suite_user_service.member.security;
 import com.suite.suite_user_service.member.dto.Token;
 import com.suite.suite_user_service.member.entity.Member;
 import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 import java.util.Base64;
 import java.util.Date;
