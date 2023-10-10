@@ -8,13 +8,11 @@ import com.suite.suite_user_service.member.auth.GoogleAuth;
 import com.suite.suite_user_service.member.dto.*;
 import com.suite.suite_user_service.member.entity.Member;
 import com.suite.suite_user_service.member.entity.MemberInfo;
-import com.suite.suite_user_service.member.entity.RefreshToken;
 import com.suite.suite_user_service.member.handler.CustomException;
 import com.suite.suite_user_service.member.handler.StatusCode;
 import com.suite.suite_user_service.member.kafka.producer.SuiteUserProducer;
 import com.suite.suite_user_service.member.repository.MemberInfoRepository;
 import com.suite.suite_user_service.member.repository.MemberRepository;
-import com.suite.suite_user_service.member.repository.RefreshTokenRepository;
 import com.suite.suite_user_service.member.security.JwtCreator;
 import com.suite.suite_user_service.member.security.dto.AuthorizerDto;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +43,6 @@ public class MemberServiceImpl implements MemberService {
     private static final int CODE_LENGTH = 6;
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
     private final JwtCreator jwtCreator;
     private final GoogleAuth googleAuth;
     private final AmazonS3 amazonS3;
@@ -71,11 +68,6 @@ public class MemberServiceImpl implements MemberService {
 
         Token token = jwtCreator.createToken(member);
 
-        refreshTokenRepository.save(
-                RefreshToken.builder()
-                        .keyId(token.getKey())
-                        .refreshToken(token.getRefreshToken())
-                        .userAgent(userAgent).build());
 
         return token;
     }
@@ -190,11 +182,6 @@ public class MemberServiceImpl implements MemberService {
 
         Token token = jwtCreator.createToken(member);
 
-        refreshTokenRepository.save(
-                RefreshToken.builder()
-                        .keyId(token.getKey())
-                        .refreshToken(token.getRefreshToken())
-                        .userAgent(userAgent).build());
         return token;
     }
 

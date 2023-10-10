@@ -22,17 +22,12 @@ public class JwtCreator {
 
     @Value("${jwt.access.key}")
     private String accessSecretKey;
-    @Value("${jwt.refresh.key")
-    private String refreshSecretKey;
     @Value("${jwt.access.validtime}")
     private long accessTokenValidTime;
-    @Value("${jwt.refresh.validtime}")
-    private long refreshTokenValidTime;
 
     @PostConstruct
     protected void init() {
         accessSecretKey = Base64.getEncoder().encodeToString(accessSecretKey.getBytes());
-        refreshSecretKey = Base64.getEncoder().encodeToString(refreshSecretKey.getBytes());
     }
 
     // 토큰 생성
@@ -40,10 +35,8 @@ public class JwtCreator {
         Claims claims = Jwts.claims().setSubject(member.getEmail()); // JWT payload 에 저장되는 정보단위
         Date now = new Date();
         String accessToken = getToken(member, claims, now, accessTokenValidTime, accessSecretKey);
-        String refreshToken = getToken(member, claims, now, refreshTokenValidTime, refreshSecretKey);
         return Token.builder()
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .key(member.getEmail()).build();
     }
 
