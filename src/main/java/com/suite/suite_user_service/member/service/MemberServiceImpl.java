@@ -74,7 +74,6 @@ public class MemberServiceImpl implements MemberService {
         refreshTokenRepository.save(
                 RefreshToken.builder()
                         .keyId(token.getKey())
-                        .refreshToken(token.getRefreshToken())
                         .userAgent(userAgent).build());
 
         return token;
@@ -191,7 +190,6 @@ public class MemberServiceImpl implements MemberService {
         refreshTokenRepository.save(
                 RefreshToken.builder()
                         .keyId(token.getKey())
-                        .refreshToken(token.getRefreshToken())
                         .userAgent(userAgent).build());
         return token;
     }
