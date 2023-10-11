@@ -47,22 +47,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2 ## 자신의 리전
-
-      - name: Check if image with tag exists
-        id: check-image
-        run: |
-          if aws ecr describe-images --repository-name suite-ecr --image-ids imageTag=suite-user-service-latest; then
-            echo "Image with tag $IMAGE_TAG exists in repository $REPOSITORY"
-            echo "::set-output name=image_exists::true"
-          else
-            echo "Image with tag $IMAGE_TAG does not exist in repository $REPOSITORY"
-            echo "::set-output name=image_exists::false"
-          fi
-
-      - name: Delete existing image with the same tag
-        if: steps.check-image.outputs.image_exists == 'true'
-        run: |
-          aws ecr batch-delete-image --repository suite-ecr --image-ids imageTag=suite-user-service-latest
       
 
       - name: Login to ECR
