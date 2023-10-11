@@ -70,6 +70,6 @@ jobs:
  
       - name: Build & Push to ECR
         run: |
-          docker build -t suite-user-service-latest:$GITHUB_SHA .
-          docker tag suite-user-service-latest:$GITHUB_SHA ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/suite-ecr:suite-user-service-latest
-          docker push ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/suite-user-service-latest:$GITHUB_SHA
+          docker build -t suite-user-service:$GITHUB_SHA .
+          docker tag suite-user-service:$GITHUB_SHA ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/suite-ecr:suite-user-service-latest
+          docker push ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/suite-user-service:$GITHUB_SHA
