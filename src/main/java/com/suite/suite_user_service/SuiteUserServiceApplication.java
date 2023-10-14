@@ -18,4 +18,5 @@ public class SuiteUserServiceApplication {
         SpringApplication.run(SuiteUserServiceApplication.class, args);
     }
 
+
 }
