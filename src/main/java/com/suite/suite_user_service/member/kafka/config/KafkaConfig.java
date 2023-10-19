@@ -60,7 +60,7 @@ public class KafkaConfig {
 
     @Bean
     public SuiteStudyService suiteStudyService(RestTemplate restTemplate) {
-        String GET_STUDYAVGINFO_URI = "http://test.suitestudy.com/study-info/";
+        String GET_STUDYAVGINFO_URI = "http://test.suitestudy.com/study/study-info/";
         return new SuiteStudyService(GET_STUDYAVGINFO_URI, restTemplate);
     }
 
