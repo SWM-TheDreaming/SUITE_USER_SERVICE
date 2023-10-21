@@ -2,9 +2,9 @@ name: Docker Image SUITE_USER_SERVICE CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "production" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "production" ]
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
         run: |
           mkdir -p ./src/main/resources
           touch ./src/main/resources/application.yml
-          echo ${{ secrets.APPLICATION_YML }} | base64 --decode >> ./src/main/resources/application.yml
+          echo ${{ secrets.PRODUCTION_APPLICATION_YML }} | base64 --decode >> ./src/main/resources/application.yml
         
       - name: Set up JDK 11
         uses: actions/setup-java@v3
@@ -52,5 +52,5 @@ jobs:
       - name: Build & Push to ECR
         run: |
           docker build -t suite-user-service:$GITHUB_SHA .
-          docker tag suite-user-service:$GITHUB_SHA ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/suite-user-service:$GITHUB_SHA
-          docker push ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/suite-user-service:$GITHUB_SHA
+          docker tag suite-user-service:$GITHUB_SHA ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/prod-suite-user-service:$GITHUB_SHA
+          docker push ${{ secrets.AWS_ACCOUNT_NUM }}.dkr.ecr.ap-northeast-2.amazonaws.com/prod-suite-user-service:$GITHUB_SHA
