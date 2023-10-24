@@ -12,6 +12,8 @@ public interface MemberService {
     Token getSuiteToken(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder);
 
     Message getOauthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder);
+
+    Message getAppleOauthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder);
     Map<String, Object> saveMemberInfo(ReqSignUpMemberDto reqSignUpMemberDto);
     void uploadImageS3(Long memberId, MultipartFile file);
     ResMemberInfoDto getMemberInfo(AuthorizerDto authorizerDto);

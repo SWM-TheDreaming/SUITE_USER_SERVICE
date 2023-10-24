@@ -69,6 +69,11 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getOauthSuiteToken(token.get("access_token"), userAgent, passwordEncoder));
     }
 
+    @PostMapping("/auth/apple/signin")
+    public ResponseEntity<Message> loginAppleAuthSuite(@RequestBody Map<String, String> token, @RequestHeader("User-Agent") String userAgent) {
+        return ResponseEntity.ok(memberService.getAppleOauthSuiteToken(token.get("access_token"), userAgent, passwordEncoder));
+    }
+
     @PostMapping("/id")
     public ResponseEntity<Message> findSuiteId(@RequestBody Map<String, String> inputPhoneByMember) {
         return ResponseEntity.ok(new Message(StatusCode.OK, memberService.lookupEmailByPhoneNumber(inputPhoneByMember.get("phoneNumber"))));

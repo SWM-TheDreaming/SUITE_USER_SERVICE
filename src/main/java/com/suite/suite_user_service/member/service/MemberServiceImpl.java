@@ -4,6 +4,7 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.suite.suite_user_service.member.auth.AppleAuth;
 import com.suite.suite_user_service.member.auth.GoogleAuth;
 
 import com.suite.suite_user_service.member.dto.*;
@@ -49,6 +50,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberInfoRepository memberInfoRepository;
     private final JwtCreator jwtCreator;
     private final GoogleAuth googleAuth;
+    private final AppleAuth appleAuth;
     private final AmazonS3 amazonS3;
     private final SnsClient snsClient;
     private final SuiteUserProducer suiteUserProducer;
@@ -77,8 +79,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Message getOauthSuiteToken( String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
+    public Message getOauthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
         ReqSignInMemberDto reqSignInMemberDto = googleAuth.getGoogleMemberInfo(accessToken);
+
+        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyOauthAccount(reqSignInMemberDto, userAgent, passwordEncoder));
+        return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.CREATED, reqSignInMemberDto));
+    }
+
+    public Message getAppleOauthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
+        ReqSignInMemberDto reqSignInMemberDto = appleAuth.getAppleMemberInfo(accessToken);
 
         Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyOauthAccount(reqSignInMemberDto, userAgent, passwordEncoder));
         return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.CREATED, reqSignInMemberDto));
