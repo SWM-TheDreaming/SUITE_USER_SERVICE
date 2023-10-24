@@ -72,8 +72,6 @@ public class AppleAuth {
     }
 
     private PublicKey getPublicKey(KeyInfo keyInfo) throws NoSuchAlgorithmException, InvalidKeySpecException {
-//        byte[] nBytes = Base64.getUrlDecoder().decode(keyInfo.getN().substring(1, keyInfo.getN().length() - 1));
-//        byte[] eBytes = Base64.getUrlDecoder().decode(keyInfo.getE().substring(1, keyInfo.getE().length() - 1));
         byte[] nBytes = Base64.getUrlDecoder().decode(keyInfo.getN());
         byte[] eBytes = Base64.getUrlDecoder().decode(keyInfo.getE());
         BigInteger n = new BigInteger(1, nBytes);
