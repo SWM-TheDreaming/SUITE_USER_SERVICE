@@ -42,6 +42,7 @@ public class MemberController {
         return ResponseEntity.ok(new Message(StatusCode.OK, memberService.saveMemberInfo(reqSignUpMemberDto)));
     }
 
+
     @PostMapping(value = "/profile-image/{memberId}", consumes = {"multipart/form-data"})
     public ResponseEntity<Message> uploadProfileImage(@PathVariable Long memberId, @RequestPart(required = false) MultipartFile file) {
         memberService.uploadImageS3(memberId, file);
