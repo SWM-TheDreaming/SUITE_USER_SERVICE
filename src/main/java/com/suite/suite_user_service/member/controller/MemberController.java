@@ -31,7 +31,7 @@ public class MemberController {
 
     @PostMapping(value = "/signup")
     public ResponseEntity<Message> signupSuite(@Valid @RequestBody ReqSignUpMemberDto reqSignUpMemberDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
+        if(bindingResult.hasErrors() && !reqSignUpMemberDto.isOauth()) throw new CustomException(StatusCode.INVALID_DATA_FORMAT);
         reqSignUpMemberDto.encodePassword(passwordEncoder);
         return ResponseEntity.ok(new Message(StatusCode.OK, memberService.saveMemberInfo(reqSignUpMemberDto)));
     }
