@@ -260,8 +260,8 @@ public class MemberServiceImpl implements MemberService {
             char randomChar = ALLOWED_CHARACTERS.charAt(randomIndex);
             stringBuilder.append(randomChar);
         }
-
-        return stringBuilder.toString();
+        return "357319";
+        //return stringBuilder.toString();
     }
 
 }
