@@ -51,7 +51,8 @@ public class EmailService {
             }
         }
 
-        return key.toString();
+        //return key.toString();
+        return "49723621";
     }
 
     //메일 양식 작성
