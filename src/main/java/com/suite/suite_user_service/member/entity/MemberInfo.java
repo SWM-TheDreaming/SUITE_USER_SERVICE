@@ -32,9 +32,6 @@ public class MemberInfo extends BaseTimeEntity {
     @Column(name = "phone", unique = true)
     private String phone;
 
-    @Column(name = "security_num")
-    private String securityNum;
-
     @Column(name = "prefer_study")
     @Enumerated(EnumType.STRING)
     private StudyCategory preferStudy;
@@ -50,13 +47,12 @@ public class MemberInfo extends BaseTimeEntity {
     private String accountNumber;
 
     @Builder
-    public MemberInfo(Long memberInfoId, Member member, String name, String nickname, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, String profileImage, String accountNumber) {
+    public MemberInfo(Long memberInfoId, Member member, String name, String nickname, String phone, StudyCategory preferStudy, StudyType studyMethod, String profileImage, String accountNumber) {
         this.memberInfoId = memberInfoId;
         this.member = member;
         this.name = name;
         this.nickname = nickname;
         this.phone = phone;
-        this.securityNum = securityNum;
         this.preferStudy = preferStudy;
         this.studyMethod = studyMethod;
         this.profileImage = profileImage;
@@ -68,7 +64,6 @@ public class MemberInfo extends BaseTimeEntity {
                 .name(name)
                 .nickName(nickname)
                 .phone(phone)
-                .securityNum(securityNum)
                 .preferStudy(preferStudy)
                 .studyMethod(studyMethod).build();
     }

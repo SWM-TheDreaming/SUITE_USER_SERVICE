@@ -56,7 +56,6 @@ public class Member extends BaseTimeEntity {
                 .name(memberInfo.getName())
                 .nickName(memberInfo.getNickname())
                 .phone(memberInfo.getPhone())
-                .securityNum(memberInfo.getSecurityNum())
                 .preferStudy(memberInfo.getPreferStudy())
                 .studyMethod(memberInfo.getStudyMethod())
                 .accountStatus(accountStatus)

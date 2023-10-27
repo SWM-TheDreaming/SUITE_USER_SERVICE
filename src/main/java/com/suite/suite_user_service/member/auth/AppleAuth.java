@@ -27,11 +27,12 @@ import java.util.Map;
 public class AppleAuth {
     public static final String APPLE_KEY = "https://appleid.apple.com/auth/keys";
     public static final int HEADER = 0;
-    public static final int PAYLOAD = 1;
-    public static final int SIGNATURE = 2;
     public static String KID = "kid";
     public static String ALG = "alg";
     public static String ALGORITHM = "RSA";
+
+    public static String EMAIL = "email";
+    public static String SUB = "sub";
 
     public ReqSignInMemberDto getAppleMemberInfo(String identityToken) {
         try {
@@ -48,8 +49,8 @@ public class AppleAuth {
             JSONObject claims = claimsToJSONObject(memberInfo);
 
             return ReqSignInMemberDto.builder()
-                    .email(claims.get("email").toString())
-                    .password(claims.get("sub").toString())
+                    .email(claims.get(EMAIL).toString())
+                    .password(claims.get(SUB).toString())
                     .isOauth(true).build();
         } catch (ParseException e) {
             throw new CustomException(StatusCode.NOT_FOUND);
