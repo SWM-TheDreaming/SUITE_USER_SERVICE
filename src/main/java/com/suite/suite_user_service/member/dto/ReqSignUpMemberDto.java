@@ -2,11 +2,9 @@ package com.suite.suite_user_service.member.dto;
 
 import com.suite.suite_user_service.member.entity.Member;
 import com.suite.suite_user_service.member.entity.MemberInfo;
-import com.suite.suite_user_service.member.handler.CustomException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
@@ -33,8 +31,8 @@ public class ReqSignUpMemberDto {
     @Pattern(regexp = "^01[0-9]{1}-[0-9]{4}-[0-9]{4}$")
     private String phone;
 
-    @Pattern(regexp = "^\\d{6}-\\d{1}$")
-    private String securityNum;
+//    @Pattern(regexp = "^\\d{6}-\\d{1}$")
+//    private String securityNum;
 
     private StudyCategory preferStudy;
 
@@ -44,14 +42,13 @@ public class ReqSignUpMemberDto {
     private String profileImage;
 
     @Builder
-    public ReqSignUpMemberDto(String email, String password, String role, String name, String nickName, String phone, String securityNum, StudyCategory preferStudy, StudyType studyMethod, boolean isOauth, String profileImage) {
+    public ReqSignUpMemberDto(String email, String password, String role, String name, String nickName, String phone, StudyCategory preferStudy, StudyType studyMethod, boolean isOauth, String profileImage) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.name = name;
         this.nickName = nickName;
         this.phone = phone;
-        this.securityNum = securityNum;
         this.preferStudy = preferStudy;
         this.studyMethod = studyMethod;
         this.isOauth = isOauth;
@@ -75,7 +72,6 @@ public class ReqSignUpMemberDto {
                 .name(name)
                 .nickname(nickName)
                 .phone(phone)
-                .securityNum(securityNum)
                 .preferStudy(preferStudy)
                 .studyMethod(studyMethod).build();
     }
