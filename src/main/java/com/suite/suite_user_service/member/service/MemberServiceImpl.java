@@ -82,14 +82,14 @@ public class MemberServiceImpl implements MemberService {
     public Message getOauthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
         ReqSignInMemberDto reqSignInMemberDto = googleAuth.getGoogleMemberInfo(accessToken);
 
-        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyOauthAccount(reqSignInMemberDto, userAgent, passwordEncoder));
+        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyOauthAccount(reqSignInMemberDto, passwordEncoder));
         return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.CREATED, reqSignInMemberDto));
     }
 
     public Message getAppleOauthSuiteToken(String accessToken, String userAgent, PasswordEncoder passwordEncoder) {
         ReqSignInMemberDto reqSignInMemberDto = appleAuth.getAppleMemberInfo(accessToken);
 
-        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyOauthAccount(reqSignInMemberDto, userAgent, passwordEncoder));
+        Optional<Token> token = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).map(member -> verifyOauthAccount(reqSignInMemberDto, passwordEncoder));
         return token.map(suiteToken -> new Message(StatusCode.OK, suiteToken)).orElseGet(() -> new Message(StatusCode.CREATED, reqSignInMemberDto));
     }
 
@@ -191,11 +191,15 @@ public class MemberServiceImpl implements MemberService {
         member.updatePassword(newPassword);
     }
 
-    private Token verifyOauthAccount(ReqSignInMemberDto reqSignInMemberDto, String userAgent, PasswordEncoder passwordEncoder) {
+    private Token verifyOauthAccount(ReqSignInMemberDto reqSignInMemberDto, PasswordEncoder passwordEncoder) {
         Member member = memberRepository.findByEmail(reqSignInMemberDto.getEmail()).orElseThrow(() -> new CustomException(StatusCode.USERNAME_NOT_FOUND));
 
         if(!passwordEncoder.matches(reqSignInMemberDto.getPassword(), member.getPassword()))
             throw new CustomException(StatusCode.REGISTERED_EMAIL);
+        else if(member.getAccountStatus().equals(AccountStatus.DORMANT.getStatus()))
+            throw new CustomException(StatusCode.DORMANT_ACCOUNT);
+        else if(member.getAccountStatus().equals(AccountStatus.DISABLED.getStatus()))
+            throw new CustomException(StatusCode.DISABLED_ACCOUNT);
 
         Token token = jwtCreator.createToken(member);
 
