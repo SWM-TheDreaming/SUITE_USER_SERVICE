@@ -17,7 +17,7 @@ public class SuiteUserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(SuiteUserServiceApplication.class, args);
     }
-    //gmail 비밀번호 변경
+
 
 
 }
