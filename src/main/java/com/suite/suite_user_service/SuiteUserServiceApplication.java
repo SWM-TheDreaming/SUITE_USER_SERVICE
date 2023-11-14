@@ -2,7 +2,6 @@ package com.suite.suite_user_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
@@ -18,7 +17,6 @@ public class SuiteUserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(SuiteUserServiceApplication.class, args);
     }
-
 
 
 }
